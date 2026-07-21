@@ -32,13 +32,36 @@ export function WeatherWidget() {
         if (!cancelled) setErr("Unavailable");
       }
     };
+
+    const fallback = () => load(37.77, -122.42, "San Francisco");
+
+    const loadByIp = async () => {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+        if (cancelled) return;
+        await load(data.latitude, data.longitude, data.city || "Your location");
+      } catch {
+        fallback();
+      }
+    };
+
+    // Inside the Chrome extension, navigator.geolocation triggers a permission
+    // warning and is unreliable on chrome://newtab. Use IP-based geolocation
+    // instead. The "geolocation" manifest permission is for chrome.geolocation,
+    // not navigator.geolocation, so weaposs not declared in manifest.json.
+    if (isExtension) {
+      loadByIp();
+      return;
+    }
+
     if (!navigator.geolocation) {
-      load(37.77, -122.42, "San Francisco");
+      fallback();
       return;
     }
     navigator.geolocation.getCurrentPosition(
       (pos) => load(pos.coords.latitude, pos.coords.longitude, "Your location"),
-      () => load(37.77, -122.42, "San Francisco"),
+      fallback,
       { timeout: 4000 },
     );
     return () => {
