@@ -49,7 +49,7 @@ export function WeatherWidget() {
     // Inside the Chrome extension, navigator.geolocation triggers a permission
     // warning and is unreliable on chrome://newtab. Use IP-based geolocation
     // instead. The "geolocation" manifest permission is for chrome.geolocation,
-    // not navigator.geolocation, so weaposs not declared in manifest.json.
+    // not navigator.geolocation, so it is not declared in manifest.json.
     if (isExtension) {
       loadByIp();
       return;
