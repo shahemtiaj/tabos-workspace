@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Plus, Flame, Trash2 } from "lucide-react";
 import { useConsistencyStore, computeStreak, dayKey } from "@/stores/consistency";
 import { GlassCard } from "@/components/glass/GlassPanel";
