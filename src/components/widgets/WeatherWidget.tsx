@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Cloud, MapPin } from "lucide-react";
 import { GlassCard } from "@/components/glass/GlassPanel";
+import { isExtension } from "@/lib/env";
 
 type Weather = { temp: number; code: number; city: string };
 
