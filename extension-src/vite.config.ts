@@ -19,5 +19,8 @@ export default defineConfig({
     emptyOutDir: false,
     assetsDir: "assets",
     target: "es2022",
+    rollupOptions: {
+      input: path.resolve(__dirname, "newtab.html"),
+    },
   },
 });
