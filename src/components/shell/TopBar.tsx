@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Settings, User } from "lucide-react";
+import { Download, Settings, User } from "lucide-react";
+import { toast } from "sonner";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
@@ -25,6 +26,35 @@ export function TopBar() {
         <SearchBar />
         <WorkspaceSwitcher />
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              toast.loading("Preparing extension…", { id: "ext-dl" });
+              fetch("/tabos-extension.zip")
+                .then((res) => {
+                  if (!res.ok) throw new Error(`Download failed: ${res.status}`);
+                  return res.blob();
+                })
+                .then((blob) => {
+                  const a = document.createElement("a");
+                  a.href = URL.createObjectURL(blob);
+                  a.download = "tabos-extension.zip";
+                  a.click();
+                  URL.revokeObjectURL(a.href);
+                  toast.success("Downloaded! Unzip, open chrome://extensions, enable Developer mode, then Load unpacked.", {
+                    id: "ext-dl",
+                    duration: 8000,
+                  });
+                })
+                .catch((err) => toast.error(err.message, { id: "ext-dl" }));
+            }}
+            className="glass hidden md:flex items-center gap-2 h-10 px-3 hover:bg-white/10 transition text-xs font-medium"
+            style={{ borderRadius: "var(--radius-pill)" }}
+            aria-label="Download Chrome extension"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Get Extension
+          </button>
           <Link
             to="/settings"
             className="glass grid h-10 w-10 place-items-center hover:bg-white/10 transition"
