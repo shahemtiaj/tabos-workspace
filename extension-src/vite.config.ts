@@ -7,19 +7,17 @@ import path from "node:path";
 // the widgets, stores, and styles from ../src but ships zero TanStack/SSR.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  root: __dirname,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "../src"),
     },
   },
-  base: "./", // relative asset URLs so chrome-extension:// works
+  base: "./",
   build: {
     outDir: path.resolve(__dirname, "../extension"),
-    emptyOutDir: false, // preserve manifest.json + icon.png
+    emptyOutDir: false,
     assetsDir: "assets",
-    rollupOptions: {
-      input: path.resolve(__dirname, "newtab.html"),
-    },
     target: "es2022",
   },
 });
