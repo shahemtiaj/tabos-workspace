@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { TopBar } from "@/components/shell/TopBar";
+import { ExtensionDownloadBanner } from "@/components/shell/ExtensionDownloadBanner";
 import { BookmarksWidget } from "@/components/widgets/BookmarksWidget";
 import { ClockWidget } from "@/components/widgets/ClockWidget";
 import { WeatherWidget } from "@/components/widgets/WeatherWidget";
@@ -29,6 +30,8 @@ function NewTab() {
     <div className="min-h-screen w-full">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-10 space-y-6">
         <TopBar />
+        <ExtensionDownloadBanner />
+
 
         <AnimatePresence mode="wait">
           <motion.section
