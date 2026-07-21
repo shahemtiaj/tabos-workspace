@@ -5,9 +5,9 @@ cd "$(dirname "$0")/.."
 echo "→ Building extension bundle…"
 bunx vite build --config extension-src/vite.config.ts
 
-# Flatten output: vite writes html at extension/extension-src/newtab.html
-if [ -f extension/extension-src/newtab.html ]; then
-  mv -f extension/extension-src/newtab.html extension/newtab.html
+# Flatten output: vite writes html at extension/extension-src/index.html
+if [ -f extension/extension-src/index.html ]; then
+  mv -f extension/extension-src/index.html extension/newtab.html
   rm -rf extension/extension-src
 fi
 
