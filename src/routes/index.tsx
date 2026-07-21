@@ -10,6 +10,8 @@ import { TodosWidget } from "@/components/widgets/TodosWidget";
 import { ConsistencyWidget } from "@/components/widgets/ConsistencyWidget";
 import { NotesWidget } from "@/components/widgets/NotesWidget";
 import { RecentActivityWidget } from "@/components/widgets/RecentActivityWidget";
+import { ResizableTile } from "@/components/shell/ResizableTile";
+import { BgDimOverlay } from "@/components/shell/WorkspaceThemeSync";
 import { useActiveWorkspace } from "@/stores/workspace";
 
 export const Route = createFileRoute("/")({
@@ -27,12 +29,11 @@ export const Route = createFileRoute("/")({
 function NewTab() {
   const ws = useActiveWorkspace();
   return (
-    <div className="min-h-screen w-full">
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-10 space-y-6">
+    <div className="min-h-screen w-full relative">
+      <BgDimOverlay />
+      <div className="relative z-10 mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-10 space-y-6">
         <TopBar />
         <ExtensionDownloadBanner />
-
-
         <AnimatePresence mode="wait">
           <motion.section
             key={ws.id}
@@ -46,43 +47,16 @@ function NewTab() {
               gridAutoRows: "minmax(140px, auto)",
             }}
           >
-            {/* Bookmarks — large hero */}
-            <div className="col-span-12 lg:col-span-8 row-span-2">
-              <BookmarksWidget />
-            </div>
-            {/* Clock */}
-            <div className="col-span-6 lg:col-span-4">
-              <ClockWidget />
-            </div>
-            {/* Weather */}
-            <div className="col-span-6 lg:col-span-4">
-              <WeatherWidget />
-            </div>
-
-            {/* Pomodoro */}
-            <div className="col-span-12 md:col-span-6 lg:col-span-4 row-span-2">
-              <PomodoroWidget />
-            </div>
-            {/* Todos */}
-            <div className="col-span-12 md:col-span-6 lg:col-span-4 row-span-2">
-              <TodosWidget />
-            </div>
-            {/* Consistency */}
-            <div className="col-span-12 md:col-span-6 lg:col-span-4 row-span-2">
-              <ConsistencyWidget />
-            </div>
-
-            {/* Notes */}
-            <div className="col-span-12 md:col-span-6 lg:col-span-5 row-span-2">
-              <NotesWidget />
-            </div>
-            {/* Recent */}
-            <div className="col-span-12 md:col-span-6 lg:col-span-7 row-span-2">
-              <RecentActivityWidget />
-            </div>
+            <ResizableTile id="bookmarks"><BookmarksWidget /></ResizableTile>
+            <ResizableTile id="clock"><ClockWidget /></ResizableTile>
+            <ResizableTile id="weather"><WeatherWidget /></ResizableTile>
+            <ResizableTile id="pomodoro"><PomodoroWidget /></ResizableTile>
+            <ResizableTile id="todos"><TodosWidget /></ResizableTile>
+            <ResizableTile id="consistency"><ConsistencyWidget /></ResizableTile>
+            <ResizableTile id="notes"><NotesWidget /></ResizableTile>
+            <ResizableTile id="activity"><RecentActivityWidget /></ResizableTile>
           </motion.section>
         </AnimatePresence>
-
         <footer className="pt-4 pb-2 text-center text-[11px] text-white/30 uppercase tracking-[0.25em]">
           TabOS · {ws.name} workspace
         </footer>

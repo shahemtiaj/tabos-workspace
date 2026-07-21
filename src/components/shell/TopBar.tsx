@@ -1,16 +1,18 @@
-import { Link } from "@tanstack/react-router";
 import { Download, Settings, User } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
 import { SearchBar } from "@/components/widgets/SearchBar";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
+import { SettingsSheet } from "./SettingsSheet";
 
 export function TopBar() {
   const hydrated = useHydrated();
   const now = useClock();
   const { userName, clockSeconds, clock24h } = useSettingsStore();
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -41,10 +43,10 @@ export function TopBar() {
                   a.download = "tabos-extension.zip";
                   a.click();
                   URL.revokeObjectURL(a.href);
-                  toast.success("Downloaded! Unzip, open chrome://extensions, enable Developer mode, then Load unpacked.", {
-                    id: "ext-dl",
-                    duration: 8000,
-                  });
+                  toast.success(
+                    "Downloaded! Unzip, open chrome://extensions, enable Developer mode, then Load unpacked.",
+                    { id: "ext-dl", duration: 8000 },
+                  );
                 })
                 .catch((err) => toast.error(err.message, { id: "ext-dl" }));
             }}
@@ -55,14 +57,15 @@ export function TopBar() {
             <Download className="h-3.5 w-3.5" />
             Get Extension
           </button>
-          <Link
-            to="/settings"
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
             className="glass grid h-10 w-10 place-items-center hover:bg-white/10 transition"
             style={{ borderRadius: "var(--radius-pill)" }}
-            aria-label="Settings"
+            aria-label="Open settings"
           >
             <Settings className="h-4 w-4" />
-          </Link>
+          </button>
           <div
             className="glass grid h-10 w-10 place-items-center"
             style={{ borderRadius: "var(--radius-pill)" }}
@@ -75,6 +78,7 @@ export function TopBar() {
       <div className="lg:hidden text-2xl font-mono tabular-nums text-white/80">
         {hydrated && now ? formatTime(now, { seconds: clockSeconds, h24: clock24h }) : ""}
       </div>
+      <SettingsSheet open={open} onClose={() => setOpen(false)} />
     </header>
   );
 }
