@@ -2,6 +2,9 @@
 set -e
 cd "$(dirname "$0")/.."
 
+echo "→ Cleaning old hashed assets…"
+rm -f extension/assets/index-*.js extension/assets/index-*.css
+
 echo "→ Building extension bundle…"
 (cd extension-src && bunx vite build)
 
