@@ -3,24 +3,18 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "→ Building extension bundle…"
-bunx vite build --config extension-src/vite.config.ts
+(cd extension-src && bunx vite build)
 
-# Flatten output: vite writes html at extension/extension-src/index.html
-if [ -f extension/extension-src/index.html ]; then
-  mv -f extension/extension-src/index.html extension/newtab.html
-  rm -rf extension/extension-src
+# Rename index.html → newtab.html (Chrome MV3 new-tab override)
+if [ -f extension/index.html ]; then
+  mv -f extension/index.html extension/newtab.html
 fi
-
-# Strip stray favicon copy
+# Strip stray files
 rm -f extension/favicon.ico
 
-# Fix asset paths in newtab.html — vite emits ./assets/... but
-# after the flatten the html is one level up so paths already match.
 echo "→ Packaging zip…"
 mkdir -p public
 rm -f public/tabos-extension.zip
-cd extension
-nix run nixpkgs#zip -- -qr /dev-server/public/tabos-extension.zip .
-cd ..
+(cd extension && nix run nixpkgs#zip -- -qr /dev-server/public/tabos-extension.zip .)
 
 echo "✓ public/tabos-extension.zip ($(du -h public/tabos-extension.zip | cut -f1))"
