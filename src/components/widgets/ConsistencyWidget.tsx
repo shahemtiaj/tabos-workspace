@@ -41,8 +41,8 @@ export function ConsistencyWidget() {
         {rules.map((r) => {
           const streak = computeStreak(r.history);
           return (
-            <>
-              <div key={r.id + "-l"} className="flex items-center gap-2 min-w-0 group">
+            <Fragment key={r.id}>
+              <div className="flex items-center gap-2 min-w-0 group">
                 <button
                   onClick={() => toggle(r.id, today)}
                   className="h-5 w-5 rounded-md border shrink-0"
@@ -60,7 +60,7 @@ export function ConsistencyWidget() {
                 </button>
                 <span className="text-[11px] text-white/50 tabular-nums shrink-0">{streak}d</span>
               </div>
-              <div key={r.id + "-h"} className="flex gap-1">
+              <div className="flex gap-1">
                 {days.map((d) => {
                   const k = dayKey(d);
                   const on = r.history[k];
@@ -78,7 +78,7 @@ export function ConsistencyWidget() {
                   );
                 })}
               </div>
-            </>
+            </Fragment>
           );
         })}
       </div>
