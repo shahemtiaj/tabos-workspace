@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, type PersistStorage } from "zustand/middleware";
 
 export type WidgetId =
+  // core
   | "bookmarks"
   | "clock"
   | "weather"
@@ -9,59 +10,133 @@ export type WidgetId =
   | "todos"
   | "consistency"
   | "notes"
-  | "activity";
+  | "activity"
+  // optional
+  | "worldClocks"
+  | "quote"
+  | "scratchpad"
+  | "heatmap";
 
-export type TileSize = "sm" | "md" | "lg" | "xl" | "full";
+export type Tile = { col: number; row: number };
 
-export const SIZE_ORDER: TileSize[] = ["sm", "md", "lg", "xl", "full"];
+export const MIN_COL = 2;
+export const MAX_COL = 12;
+export const MIN_ROW = 1;
+export const MAX_ROW = 6;
 
-export const SIZE_SPANS: Record<TileSize, { col: number; row: number }> = {
-  sm: { col: 4, row: 1 },
-  md: { col: 4, row: 2 },
-  lg: { col: 6, row: 2 },
-  xl: { col: 8, row: 2 },
-  full: { col: 12, row: 2 },
+// Default sizes (col of 12, row units of ~140px)
+const defaults: Record<WidgetId, Tile> = {
+  bookmarks: { col: 8, row: 2 },
+  clock: { col: 4, row: 1 },
+  weather: { col: 4, row: 1 },
+  pomodoro: { col: 4, row: 2 },
+  todos: { col: 4, row: 2 },
+  consistency: { col: 4, row: 2 },
+  notes: { col: 6, row: 2 },
+  activity: { col: 6, row: 2 },
+  worldClocks: { col: 6, row: 1 },
+  quote: { col: 6, row: 1 },
+  scratchpad: { col: 4, row: 2 },
+  heatmap: { col: 8, row: 2 },
 };
 
-const defaults: Record<WidgetId, TileSize> = {
-  bookmarks: "xl",
-  clock: "sm",
-  weather: "sm",
-  pomodoro: "md",
-  todos: "md",
-  consistency: "md",
-  notes: "lg",
-  activity: "lg",
+// Which widgets are enabled/visible by default
+const defaultEnabled: Record<WidgetId, boolean> = {
+  bookmarks: true,
+  clock: true,
+  weather: true,
+  pomodoro: true,
+  todos: true,
+  consistency: true,
+  notes: true,
+  activity: true,
+  worldClocks: false,
+  quote: false,
+  scratchpad: false,
+  heatmap: false,
 };
+
+export const OPTIONAL_WIDGETS: WidgetId[] = ["worldClocks", "quote", "scratchpad", "heatmap"];
 
 type State = {
-  sizes: Record<WidgetId, TileSize>;
-  hidden: Partial<Record<WidgetId, boolean>>;
+  tiles: Record<WidgetId, Tile>;
+  enabled: Record<WidgetId, boolean>;
   editMode: boolean;
-  setSize: (id: WidgetId, size: TileSize) => void;
-  cycleSize: (id: WidgetId) => void;
-  toggleHidden: (id: WidgetId) => void;
+  setTile: (id: WidgetId, tile: Tile) => void;
+  toggleEnabled: (id: WidgetId) => void;
+  setEnabled: (id: WidgetId, v: boolean) => void;
   setEditMode: (v: boolean) => void;
   reset: () => void;
 };
 
+const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+
+// Migrate legacy persisted shape { sizes, hidden }
+const storage: PersistStorage<State> = {
+  getItem: (name) => {
+    if (typeof window === "undefined") return null;
+    const raw = window.localStorage.getItem(name);
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      const st = parsed?.state ?? {};
+      if (st.tiles && st.enabled) return parsed;
+      // migrate
+      const SIZE_SPANS: Record<string, Tile> = {
+        sm: { col: 4, row: 1 },
+        md: { col: 4, row: 2 },
+        lg: { col: 6, row: 2 },
+        xl: { col: 8, row: 2 },
+        full: { col: 12, row: 2 },
+      };
+      const tiles = { ...defaults };
+      if (st.sizes) {
+        for (const k of Object.keys(st.sizes)) {
+          const span = SIZE_SPANS[st.sizes[k]];
+          if (span && k in tiles) (tiles as any)[k] = span;
+        }
+      }
+      const enabled = { ...defaultEnabled };
+      if (st.hidden) {
+        for (const k of Object.keys(st.hidden)) {
+          if (k in enabled) (enabled as any)[k] = !st.hidden[k];
+        }
+      }
+      return { state: { ...st, tiles, enabled, editMode: false }, version: parsed.version };
+    } catch {
+      return null;
+    }
+  },
+  setItem: (name, value) => {
+    if (typeof window !== "undefined") window.localStorage.setItem(name, JSON.stringify(value));
+  },
+  removeItem: (name) => {
+    if (typeof window !== "undefined") window.localStorage.removeItem(name);
+  },
+};
+
 export const useLayoutStore = create<State>()(
   persist(
-    (set, get) => ({
-      sizes: defaults,
-      hidden: {},
+    (set) => ({
+      tiles: defaults,
+      enabled: defaultEnabled,
       editMode: false,
-      setSize: (id, size) => set((s) => ({ sizes: { ...s.sizes, [id]: size } })),
-      cycleSize: (id) => {
-        const cur = get().sizes[id] ?? "md";
-        const next = SIZE_ORDER[(SIZE_ORDER.indexOf(cur) + 1) % SIZE_ORDER.length];
-        set((s) => ({ sizes: { ...s.sizes, [id]: next } }));
-      },
-      toggleHidden: (id) =>
-        set((s) => ({ hidden: { ...s.hidden, [id]: !s.hidden[id] } })),
+      setTile: (id, tile) =>
+        set((s) => ({
+          tiles: {
+            ...s.tiles,
+            [id]: {
+              col: clamp(tile.col, MIN_COL, MAX_COL),
+              row: clamp(tile.row, MIN_ROW, MAX_ROW),
+            },
+          },
+        })),
+      toggleEnabled: (id) =>
+        set((s) => ({ enabled: { ...s.enabled, [id]: !s.enabled[id] } })),
+      setEnabled: (id, v) => set((s) => ({ enabled: { ...s.enabled, [id]: v } })),
       setEditMode: (editMode) => set({ editMode }),
-      reset: () => set({ sizes: defaults, hidden: {} }),
+      reset: () => set({ tiles: defaults, enabled: defaultEnabled }),
     }),
-    { name: "tabos-layout" },
+    { name: "tabos-layout-v2", storage },
   ),
 );

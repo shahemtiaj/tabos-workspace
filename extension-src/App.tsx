@@ -7,7 +7,12 @@ import { TodosWidget } from "@/components/widgets/TodosWidget";
 import { ConsistencyWidget } from "@/components/widgets/ConsistencyWidget";
 import { NotesWidget } from "@/components/widgets/NotesWidget";
 import { RecentActivityWidget } from "@/components/widgets/RecentActivityWidget";
+import { WorldClocksWidget } from "@/components/widgets/WorldClocksWidget";
+import { QuoteWidget } from "@/components/widgets/QuoteWidget";
+import { ScratchpadWidget } from "@/components/widgets/ScratchpadWidget";
+import { HabitHeatmapWidget } from "@/components/widgets/HabitHeatmapWidget";
 import { ResizableTile } from "@/components/shell/ResizableTile";
+import { EditModeBar } from "@/components/shell/EditModeBar";
 import { BgDimOverlay } from "@/components/shell/WorkspaceThemeSync";
 import { useActiveWorkspace } from "@/stores/workspace";
 import { ExtTopBar } from "./ExtTopBar";
@@ -40,12 +45,17 @@ export default function App() {
             <ResizableTile id="consistency"><ConsistencyWidget /></ResizableTile>
             <ResizableTile id="notes"><NotesWidget /></ResizableTile>
             <ResizableTile id="activity"><RecentActivityWidget /></ResizableTile>
+            <ResizableTile id="worldClocks"><WorldClocksWidget /></ResizableTile>
+            <ResizableTile id="quote"><QuoteWidget /></ResizableTile>
+            <ResizableTile id="scratchpad"><ScratchpadWidget /></ResizableTile>
+            <ResizableTile id="heatmap"><HabitHeatmapWidget /></ResizableTile>
           </motion.section>
         </AnimatePresence>
         <footer className="pt-4 pb-2 text-center text-[11px] text-white/30 uppercase tracking-[0.25em]">
           TabOS · {ws.name} workspace
         </footer>
       </div>
+      <EditModeBar />
     </div>
   );
 }
