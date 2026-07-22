@@ -18,7 +18,7 @@ const CORE_WIDGETS: { id: WidgetId; label: string }[] = [
   { id: "activity", label: "Recent Activity" },
 ];
 
-const OPTIONAL_META: Record<(typeof OPTIONAL_WIDGETS)[number], { label: string; desc: string }> = {
+const OPTIONAL_META: Record<string, { label: string; desc: string }> = {
   worldClocks: { label: "World Clocks", desc: "Multi-timezone strip" },
   quote: { label: "Daily Quote", desc: "Rotating inspiration" },
   scratchpad: { label: "Scratchpad", desc: "Fast throwaway notes" },
@@ -295,47 +295,69 @@ export function SettingsSheet({ open, onClose }: Props) {
               <Section title="Widgets & Layout">
                 <div className="flex items-center justify-between pb-3">
                   <button
-                    onClick={() => layout.setEditMode(!layout.editMode)}
-                    className="glass-subtle rounded-full px-3 py-1.5 text-xs hover:bg-white/10"
+                    onClick={() => {
+                      layout.setEditMode(!layout.editMode);
+                      if (!layout.editMode) onClose();
+                    }}
+                    className="glass-subtle rounded-full px-3 py-1.5 text-xs flex items-center gap-1 hover:bg-white/10"
                   >
-                    {layout.editMode ? "Exit edit mode" : "Enter edit mode"}
+                    <Pencil className="h-3 w-3" />
+                    {layout.editMode ? "Exit edit mode" : "Enter edit mode to resize"}
                   </button>
                   <button
                     onClick={() => layout.reset()}
                     className="glass-subtle rounded-full px-3 py-1.5 text-xs flex items-center gap-1 hover:bg-white/10"
                   >
-                    <RotateCcw className="h-3 w-3" /> Reset layout
+                    <RotateCcw className="h-3 w-3" /> Reset
                   </button>
                 </div>
+
+                <div className="text-[10px] uppercase tracking-widest text-white/40 mt-2 mb-1">Core</div>
                 <div className="space-y-2">
-                  {WIDGETS.map((w) => (
-                    <div
-                      key={w.id}
-                      className="glass-subtle rounded-2xl px-3 py-2 flex items-center gap-3"
-                    >
-                      <span className="flex-1 text-sm">{w.label}</span>
-                      <select
-                        value={layout.sizes[w.id]}
-                        onChange={(e) => layout.setSize(w.id, e.target.value as TileSize)}
-                        className="glass-subtle rounded-full px-2 py-1 text-xs outline-none"
-                      >
-                        {SIZE_ORDER.map((sz) => (
-                          <option key={sz} value={sz} className="bg-neutral-900">
-                            {sz.toUpperCase()}
-                          </option>
-                        ))}
-                      </select>
-                      <label className="flex items-center gap-1 text-xs text-white/60 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={!layout.hidden[w.id]}
-                          onChange={() => layout.toggleHidden(w.id)}
-                          className="h-4 w-4 accent-indigo-500"
-                        />
-                        Show
-                      </label>
-                    </div>
-                  ))}
+                  {CORE_WIDGETS.map((w) => {
+                    const t = layout.tiles[w.id];
+                    return (
+                      <div key={w.id} className="glass-subtle rounded-2xl px-3 py-2 flex items-center gap-3">
+                        <span className="flex-1 text-sm">{w.label}</span>
+                        <span className="text-[10px] text-white/40 tabular-nums">{t.col}×{t.row}</span>
+                        <label className="flex items-center gap-1 text-xs text-white/60 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={layout.enabled[w.id]}
+                            onChange={() => layout.toggleEnabled(w.id)}
+                            className="h-4 w-4 accent-indigo-500"
+                          />
+                          Show
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="text-[10px] uppercase tracking-widest text-white/40 mt-4 mb-1">Optional</div>
+                <div className="space-y-2">
+                  {OPTIONAL_WIDGETS.map((id) => {
+                    const meta = OPTIONAL_META[id];
+                    const t = layout.tiles[id];
+                    return (
+                      <div key={id} className="glass-subtle rounded-2xl px-3 py-2 flex items-center gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm">{meta.label}</div>
+                          <div className="text-[10px] text-white/50 truncate">{meta.desc}</div>
+                        </div>
+                        <span className="text-[10px] text-white/40 tabular-nums">{t.col}×{t.row}</span>
+                        <label className="flex items-center gap-1 text-xs text-white/60 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={layout.enabled[id]}
+                            onChange={() => layout.toggleEnabled(id)}
+                            className="h-4 w-4 accent-indigo-500"
+                          />
+                          Enable
+                        </label>
+                      </div>
+                    );
+                  })}
                 </div>
               </Section>
 
