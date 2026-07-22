@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
-import { X, Trash2, Plus, Copy, Locate, RotateCcw } from "lucide-react";
+import { X, Trash2, Plus, Copy, Locate, RotateCcw, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
-import { useLayoutStore, SIZE_ORDER, type WidgetId, type TileSize } from "@/stores/layout";
+import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
 
 type Props = { open: boolean; onClose: () => void };
 
-const WIDGETS: { id: WidgetId; label: string }[] = [
+const CORE_WIDGETS: { id: WidgetId; label: string }[] = [
   { id: "bookmarks", label: "Bookmarks" },
   { id: "clock", label: "Clock" },
   { id: "weather", label: "Weather" },
@@ -17,6 +17,13 @@ const WIDGETS: { id: WidgetId; label: string }[] = [
   { id: "notes", label: "Notes" },
   { id: "activity", label: "Recent Activity" },
 ];
+
+const OPTIONAL_META: Record<(typeof OPTIONAL_WIDGETS)[number], { label: string; desc: string }> = {
+  worldClocks: { label: "World Clocks", desc: "Multi-timezone strip" },
+  quote: { label: "Daily Quote", desc: "Rotating inspiration" },
+  scratchpad: { label: "Scratchpad", desc: "Fast throwaway notes" },
+  heatmap: { label: "Habit Heatmap", desc: "13-week consistency grid" },
+};
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
