@@ -1,9 +1,10 @@
-import { Download, Settings, User } from "lucide-react";
+import { Download, Pencil, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
+import { useLayoutStore } from "@/stores/layout";
 import { SearchBar } from "@/components/widgets/SearchBar";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { SettingsSheet } from "./SettingsSheet";
@@ -12,6 +13,8 @@ export function TopBar() {
   const hydrated = useHydrated();
   const now = useClock();
   const { userName, clockSeconds, clock24h } = useSettingsStore();
+  const editMode = useLayoutStore((s) => s.editMode);
+  const setEditMode = useLayoutStore((s) => s.setEditMode);
   const [open, setOpen] = useState(false);
 
   return (
@@ -56,6 +59,16 @@ export function TopBar() {
           >
             <Download className="h-3.5 w-3.5" />
             Get Extension
+          </button>
+          <button
+            type="button"
+            onClick={() => setEditMode(!editMode)}
+            className={`glass grid h-10 w-10 place-items-center hover:bg-white/10 transition ${editMode ? "ring-2 ring-white/40" : ""}`}
+            style={{ borderRadius: "var(--radius-pill)" }}
+            aria-label="Edit layout"
+            title="Edit layout"
+          >
+            <Pencil className="h-4 w-4" />
           </button>
           <button
             type="button"

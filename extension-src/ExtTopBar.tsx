@@ -1,8 +1,9 @@
-import { Settings, User } from "lucide-react";
+import { Pencil, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
+import { useLayoutStore } from "@/stores/layout";
 import { SearchBar } from "@/components/widgets/SearchBar";
 import { WorkspaceSwitcher } from "@/components/shell/WorkspaceSwitcher";
 import { SettingsSheet } from "@/components/shell/SettingsSheet";
@@ -12,6 +13,8 @@ export function ExtTopBar() {
   const hydrated = useHydrated();
   const now = useClock();
   const { userName, clockSeconds, clock24h } = useSettingsStore();
+  const editMode = useLayoutStore((s) => s.editMode);
+  const setEditMode = useLayoutStore((s) => s.setEditMode);
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,6 +31,16 @@ export function ExtTopBar() {
         <SearchBar />
         <WorkspaceSwitcher />
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setEditMode(!editMode)}
+            className={`glass grid h-10 w-10 place-items-center hover:bg-white/10 transition ${editMode ? "ring-2 ring-white/40" : ""}`}
+            style={{ borderRadius: "var(--radius-pill)" }}
+            aria-label="Edit layout"
+            title="Edit layout"
+          >
+            <Pencil className="h-4 w-4" />
+          </button>
           <button
             type="button"
             onClick={() => setOpen(true)}
