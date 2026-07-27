@@ -74,10 +74,12 @@ export function SettingsSheet({ open, onClose }: Props) {
     // WeatherWidget uses. On the web app, keep the precise GPS prompt.
     if (isExtension) {
       try {
-        const res = await fetch("https://ipapi.co/json/");
+        const res = await fetch("https://get.geojs.io/v1/ip/geo.json");
         const data = await res.json();
-        if (typeof data.latitude === "number") s.setManualLat(Number(data.latitude.toFixed(4)));
-        if (typeof data.longitude === "number") s.setManualLon(Number(data.longitude.toFixed(4)));
+        const lat = parseFloat(data.latitude);
+        const lon = parseFloat(data.longitude);
+        if (Number.isFinite(lat)) s.setManualLat(Number(lat.toFixed(4)));
+        if (Number.isFinite(lon)) s.setManualLon(Number(lon.toFixed(4)));
         if (data.city && !s.manualCity) s.setManualCity(data.city);
       } catch {
         /* ignore */

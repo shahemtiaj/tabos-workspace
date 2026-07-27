@@ -77,10 +77,16 @@ export function WeatherWidget() {
 
     const loadByIp = async () => {
       try {
-        const res = await fetch("https://ipapi.co/json/");
+        const res = await fetch("https://get.geojs.io/v1/ip/geo.json");
         const data = await res.json();
         if (cancelled) return;
-        await load(data.latitude, data.longitude, data.city || "Your location");
+        const lat = parseFloat(data.latitude);
+        const lon = parseFloat(data.longitude);
+        if (Number.isFinite(lat) && Number.isFinite(lon)) {
+          await load(lat, lon, data.city || data.region || "Your location");
+        } else {
+          fallback();
+        }
       } catch {
         fallback();
       }
