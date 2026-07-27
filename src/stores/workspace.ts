@@ -56,7 +56,15 @@ export const useWorkspaceStore = create<State>()(
         set((s) => {
           const src = s.workspaces.find((w) => w.id === id);
           if (!src) return s;
-          const copy: Workspace = { ...src, id: crypto.randomUUID(), name: `${src.name} Copy` };
+          // Deep-clone bookmarks so the copy owns its own array/entries — a
+          // shallow spread would share the reference and let a future mutation
+          // silently corrupt the source workspace.
+          const copy: Workspace = {
+            ...src,
+            id: crypto.randomUUID(),
+            name: `${src.name} Copy`,
+            bookmarks: src.bookmarks.map((b) => ({ ...b, id: crypto.randomUUID() })),
+          };
           return { workspaces: [...s.workspaces, copy] };
         }),
       renameWorkspace: (id, name) =>
