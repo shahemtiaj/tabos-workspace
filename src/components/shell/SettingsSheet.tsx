@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
+import { isExtension } from "@/lib/env";
 
 type Props = { open: boolean; onClose: () => void };
 
