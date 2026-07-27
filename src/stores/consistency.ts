@@ -14,7 +14,14 @@ type State = {
   toggle: (id: string, dayKey: string) => void;
 };
 
-export const dayKey = (d = new Date()) => d.toISOString().slice(0, 10);
+// Local-date key (YYYY-MM-DD) — using toISOString() would shift the day for
+// any timezone offset from UTC and corrupt streaks/heatmap near midnight.
+export const dayKey = (d = new Date()) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
 
 export const useConsistencyStore = create<State>()(
   persist(
