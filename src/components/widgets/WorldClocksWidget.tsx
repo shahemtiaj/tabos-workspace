@@ -39,14 +39,22 @@ export function WorldClocksWidget() {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 flex-1 overflow-auto">
         {cities.map((c, i) => {
-          const time = now
-            ? new Intl.DateTimeFormat("en-US", {
+          let time = "";
+          let invalid = false;
+          if (now) {
+            try {
+              time = new Intl.DateTimeFormat("en-US", {
                 timeZone: c.tz,
                 hour: "numeric",
                 minute: "2-digit",
                 hour12: !clock24h,
-              }).format(now)
-            : "";
+              }).format(now);
+            } catch {
+              invalid = true;
+              time = "Invalid TZ";
+            }
+          }
+          void invalid;
           return (
             <div key={c.label + i} className="glass-subtle rounded-2xl p-3 relative group">
               <div className="text-[10px] uppercase tracking-widest text-white/50">{c.label}</div>
