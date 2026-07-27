@@ -1,5 +1,5 @@
 import { Globe2, X, Plus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { GlassPanel } from "@/components/glass/GlassPanel";
@@ -25,12 +25,58 @@ const useWorldClocks = create<S>()(
   ),
 );
 
+const TZ_OPTIONS: { tz: string; label: string }[] = [
+  { tz: "Pacific/Honolulu", label: "Honolulu" },
+  { tz: "America/Anchorage", label: "Anchorage" },
+  { tz: "America/Los_Angeles", label: "Los Angeles" },
+  { tz: "America/Denver", label: "Denver" },
+  { tz: "America/Chicago", label: "Chicago" },
+  { tz: "America/New_York", label: "New York" },
+  { tz: "America/Toronto", label: "Toronto" },
+  { tz: "America/Mexico_City", label: "Mexico City" },
+  { tz: "America/Sao_Paulo", label: "São Paulo" },
+  { tz: "America/Argentina/Buenos_Aires", label: "Buenos Aires" },
+  { tz: "Atlantic/Reykjavik", label: "Reykjavík" },
+  { tz: "Europe/London", label: "London" },
+  { tz: "Europe/Lisbon", label: "Lisbon" },
+  { tz: "Europe/Paris", label: "Paris" },
+  { tz: "Europe/Berlin", label: "Berlin" },
+  { tz: "Europe/Madrid", label: "Madrid" },
+  { tz: "Europe/Rome", label: "Rome" },
+  { tz: "Europe/Amsterdam", label: "Amsterdam" },
+  { tz: "Europe/Stockholm", label: "Stockholm" },
+  { tz: "Europe/Athens", label: "Athens" },
+  { tz: "Europe/Istanbul", label: "Istanbul" },
+  { tz: "Europe/Moscow", label: "Moscow" },
+  { tz: "Africa/Cairo", label: "Cairo" },
+  { tz: "Africa/Lagos", label: "Lagos" },
+  { tz: "Africa/Johannesburg", label: "Johannesburg" },
+  { tz: "Asia/Jerusalem", label: "Jerusalem" },
+  { tz: "Asia/Dubai", label: "Dubai" },
+  { tz: "Asia/Tehran", label: "Tehran" },
+  { tz: "Asia/Karachi", label: "Karachi" },
+  { tz: "Asia/Kolkata", label: "Mumbai / Delhi" },
+  { tz: "Asia/Kathmandu", label: "Kathmandu" },
+  { tz: "Asia/Dhaka", label: "Dhaka" },
+  { tz: "Asia/Bangkok", label: "Bangkok" },
+  { tz: "Asia/Jakarta", label: "Jakarta" },
+  { tz: "Asia/Singapore", label: "Singapore" },
+  { tz: "Asia/Hong_Kong", label: "Hong Kong" },
+  { tz: "Asia/Shanghai", label: "Shanghai" },
+  { tz: "Asia/Seoul", label: "Seoul" },
+  { tz: "Asia/Tokyo", label: "Tokyo" },
+  { tz: "Australia/Perth", label: "Perth" },
+  { tz: "Australia/Sydney", label: "Sydney" },
+  { tz: "Pacific/Auckland", label: "Auckland" },
+];
+
 export function WorldClocksWidget() {
   const now = useClock();
   const { clock24h } = useSettingsStore();
   const { cities, add, remove } = useWorldClocks();
-  const [label, setLabel] = useState("");
   const [tz, setTz] = useState("");
+  const [customLabel, setCustomLabel] = useState("");
+  const selected = useMemo(() => TZ_OPTIONS.find((o) => o.tz === tz), [tz]);
 
   return (
     <GlassPanel className="h-full w-full p-5 flex flex-col">
