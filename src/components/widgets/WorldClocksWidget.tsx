@@ -119,26 +119,38 @@ export function WorldClocksWidget() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (!label.trim() || !tz.trim()) return;
-          add({ label: label.trim(), tz: tz.trim() });
-          setLabel("");
+          if (!tz.trim()) return;
+          const label = customLabel.trim() || selected?.label || tz.split("/").pop()!.replace(/_/g, " ");
+          add({ label, tz: tz.trim() });
           setTz("");
+          setCustomLabel("");
         }}
         className="mt-2 flex gap-1"
       >
-        <input
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          placeholder="City"
-          className="glass-subtle rounded-full px-3 py-1.5 text-xs outline-none flex-1 min-w-0"
-        />
-        <input
+        <select
           value={tz}
           onChange={(e) => setTz(e.target.value)}
-          placeholder="Asia/Dhaka"
           className="glass-subtle rounded-full px-3 py-1.5 text-xs outline-none flex-1 min-w-0"
+        >
+          <option value="" className="bg-neutral-900">Select timezone…</option>
+          {TZ_OPTIONS.map((o) => (
+            <option key={o.tz} value={o.tz} className="bg-neutral-900">
+              {o.label}
+            </option>
+          ))}
+        </select>
+        <input
+          value={customLabel}
+          onChange={(e) => setCustomLabel(e.target.value)}
+          placeholder="Label (optional)"
+          className="glass-subtle rounded-full px-3 py-1.5 text-xs outline-none w-28 min-w-0"
         />
-        <button className="glass-subtle rounded-full h-8 w-8 grid place-items-center hover:bg-white/10">
+        <button
+          type="submit"
+          disabled={!tz}
+          className="glass-subtle rounded-full h-8 w-8 grid place-items-center hover:bg-white/10 disabled:opacity-40"
+          aria-label="Add clock"
+        >
           <Plus className="h-3 w-3" />
         </button>
       </form>
