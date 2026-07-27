@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
+import { isExtension } from "@/lib/env";
 
 type Props = { open: boolean; onClose: () => void };
 
@@ -67,7 +68,22 @@ export function SettingsSheet({ open, onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const detectLocation = () => {
+  const detectLocation = async () => {
+    // In the extension (chrome://newtab), navigator.geolocation triggers a
+    // permission warning and is unreliable — use the same IP fallback the
+    // WeatherWidget uses. On the web app, keep the precise GPS prompt.
+    if (isExtension) {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+        if (typeof data.latitude === "number") s.setManualLat(Number(data.latitude.toFixed(4)));
+        if (typeof data.longitude === "number") s.setManualLon(Number(data.longitude.toFixed(4)));
+        if (data.city && !s.manualCity) s.setManualCity(data.city);
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
