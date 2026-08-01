@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { memo, useDeferredValue, useMemo, useRef, useState, type FormEvent } from "react";
 import { Search, X, History, Command, Link as LinkIcon } from "lucide-react";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useSettingsStore, type SearchEngine } from "@/stores/settings";
@@ -30,28 +30,25 @@ export function SearchWidget() {
   const setSearchEngine = useSettingsStore((s) => s.setSearchEngine);
   const recentSearchLimit = useSettingsStore((s) => s.recentSearchLimit);
   const recent = useSearchStore((s) => s.recent);
-  const push = useSearchStore((s) => s.push);
   const remove = useSearchStore((s) => s.remove);
   const clear = useSearchStore((s) => s.clear);
 
+  // Filtering is deferred so typing never blocks the input paint.
+  const deferredQ = useDeferredValue(q);
   const suggestions = useMemo(() => {
     if (!focused || recentSearchLimit <= 0) return [];
-    const needle = q.trim().toLowerCase();
+    const needle = deferredQ.trim().toLowerCase();
     const base = needle ? recent.filter((r) => r.q.toLowerCase().includes(needle)) : recent;
     return base.slice(0, recentSearchLimit);
-  }, [recent, q, recentSearchLimit, focused]);
+  }, [recent, deferredQ, recentSearchLimit, focused]);
 
   const go = (query: string) => {
     const v = query.trim();
     if (!v) return;
     const target = asUrl(v) ?? ENGINES[searchEngine].url(v);
-    // Navigate first so Enter feels instant; persist history right after.
-    try {
-      window.location.assign(target);
-    } catch {
-      window.open(target, "_self") ?? window.open(target, "_blank", "noopener");
-    }
-    setTimeout(() => push(v), 0);
+    // Navigate immediately; history write happens after the navigation is queued.
+    window.location.href = target;
+    setTimeout(() => useSearchStore.getState().push(v), 0);
   };
 
 
@@ -62,6 +59,7 @@ export function SearchWidget() {
 
   const isUrl = asUrl(q) !== null;
   const showSuggestions = focused && suggestions.length > 0;
+
 
   return (
     <GlassPanel className="h-full flex flex-col gap-3 p-5">
