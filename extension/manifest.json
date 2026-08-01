@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TabOS — New Tab Reimagined",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Replace Chrome's new tab with a luxurious glass workspace: bookmarks, todos, consistency, focus timer, notes, and more.",
   "chrome_url_overrides": { "newtab": "newtab.html" },
   "icons": { "16": "icon.png", "48": "icon.png", "128": "icon.png" }

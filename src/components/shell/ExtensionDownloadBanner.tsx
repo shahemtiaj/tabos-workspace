@@ -1,10 +1,11 @@
 import { Download, Chrome } from "lucide-react";
 import { toast } from "sonner";
+import { TABOS_VERSION, EXTENSION_ZIP } from "@/lib/version";
 
 export function ExtensionDownloadBanner() {
   const download = () => {
     toast.loading("Preparing extension…", { id: "ext-dl" });
-    fetch("/tabos-extension.zip")
+    fetch(`/${EXTENSION_ZIP}?v=${TABOS_VERSION}`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error(`Download failed (${res.status})`);
         return res.blob();
@@ -12,7 +13,7 @@ export function ExtensionDownloadBanner() {
       .then((blob) => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "tabos-extension.zip";
+        a.download = EXTENSION_ZIP;
         a.click();
         URL.revokeObjectURL(a.href);
         toast.success("Downloaded! Unzip → chrome://extensions → Developer mode → Load unpacked.", {
