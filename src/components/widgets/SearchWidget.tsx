@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { memo, useDeferredValue, useMemo, useRef, useState, type FormEvent } from "react";
 import { Search, X, History, Command, Link as LinkIcon } from "lucide-react";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useSettingsStore, type SearchEngine } from "@/stores/settings";
@@ -21,7 +21,41 @@ function asUrl(input: string): string | null {
   return null;
 }
 
+/** Memoized row so typing doesn't re-render the whole suggestion list. */
+const SuggestionRow = memo(function SuggestionRow({
+  q,
+  onGo,
+  onRemove,
+}: {
+  q: string;
+  onGo: (q: string) => void;
+  onRemove: (q: string) => void;
+}) {
+  return (
+    <li className="flex items-center gap-1">
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => onGo(q)}
+        className="flex-1 min-w-0 truncate text-left text-sm px-3 py-2 rounded-2xl hover:bg-white/8 transition text-white/80"
+      >
+        {q}
+      </button>
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => onRemove(q)}
+        className="grid h-7 w-7 place-items-center rounded-full text-white/35 hover:text-white hover:bg-white/10 shrink-0"
+        aria-label={`Remove ${q}`}
+      >
+        <X className="h-3 w-3" />
+      </button>
+    </li>
+  );
+});
+
 /** Mandatory search widget: engine picker + recent-search suggestions. */
+
 export function SearchWidget() {
   const [q, setQ] = useState("");
   const [focused, setFocused] = useState(false);
@@ -30,28 +64,25 @@ export function SearchWidget() {
   const setSearchEngine = useSettingsStore((s) => s.setSearchEngine);
   const recentSearchLimit = useSettingsStore((s) => s.recentSearchLimit);
   const recent = useSearchStore((s) => s.recent);
-  const push = useSearchStore((s) => s.push);
   const remove = useSearchStore((s) => s.remove);
   const clear = useSearchStore((s) => s.clear);
 
+  // Filtering is deferred so typing never blocks the input paint.
+  const deferredQ = useDeferredValue(q);
   const suggestions = useMemo(() => {
     if (!focused || recentSearchLimit <= 0) return [];
-    const needle = q.trim().toLowerCase();
+    const needle = deferredQ.trim().toLowerCase();
     const base = needle ? recent.filter((r) => r.q.toLowerCase().includes(needle)) : recent;
     return base.slice(0, recentSearchLimit);
-  }, [recent, q, recentSearchLimit, focused]);
+  }, [recent, deferredQ, recentSearchLimit, focused]);
 
   const go = (query: string) => {
     const v = query.trim();
     if (!v) return;
     const target = asUrl(v) ?? ENGINES[searchEngine].url(v);
-    // Navigate first so Enter feels instant; persist history right after.
-    try {
-      window.location.assign(target);
-    } catch {
-      window.open(target, "_self") ?? window.open(target, "_blank", "noopener");
-    }
-    setTimeout(() => push(v), 0);
+    // Navigate immediately; history write happens after the navigation is queued.
+    window.location.href = target;
+    setTimeout(() => useSearchStore.getState().push(v), 0);
   };
 
 
@@ -62,6 +93,7 @@ export function SearchWidget() {
 
   const isUrl = asUrl(q) !== null;
   const showSuggestions = focused && suggestions.length > 0;
+
 
   return (
     <GlassPanel className="h-full flex flex-col gap-3 p-5">
@@ -139,27 +171,10 @@ export function SearchWidget() {
           </div>
           <ul className="space-y-1">
             {suggestions.map((r) => (
-              <li key={r.q} className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => go(r.q)}
-                  className="flex-1 min-w-0 truncate text-left text-sm px-3 py-2 rounded-2xl hover:bg-white/8 transition text-white/80"
-                >
-                  {r.q}
-                </button>
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => remove(r.q)}
-                  className="grid h-7 w-7 place-items-center rounded-full text-white/35 hover:text-white hover:bg-white/10 shrink-0"
-                  aria-label={`Remove ${r.q}`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </li>
+              <SuggestionRow key={r.q} q={r.q} onGo={go} onRemove={remove} />
             ))}
           </ul>
+
         </div>
       ) : (
         <p className="flex items-center gap-1.5 px-1 text-[11px] text-white/35">
