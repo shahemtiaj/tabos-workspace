@@ -46,7 +46,7 @@ const defaults: Record<WidgetId, Tile> = {
   scratchpad: { col: 4, row: 2 },
   heatmap: { col: 8, row: 2 },
   countdown: { col: 4, row: 2 },
-  calculator: { col: 3, row: 2 },
+  calculator: { col: 4, row: 2 },
   ambient: { col: 4, row: 1 },
   readLater: { col: 5, row: 2 },
   water: { col: 4, row: 2 },
@@ -63,12 +63,12 @@ const defaultEnabled: Record<WidgetId, boolean> = {
   consistency: true,
   notes: true,
   activity: true,
+  calculator: true,
   worldClocks: false,
   quote: false,
   scratchpad: false,
   heatmap: false,
   countdown: false,
-  calculator: false,
   ambient: false,
   readLater: false,
   water: false,
@@ -83,11 +83,11 @@ export const OPTIONAL_WIDGETS: WidgetId[] = [
   "scratchpad",
   "heatmap",
   "countdown",
-  "calculator",
   "ambient",
   "readLater",
   "water",
 ];
+
 
 type State = {
   tiles: Record<WidgetId, Tile>;
