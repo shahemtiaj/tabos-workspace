@@ -30,10 +30,15 @@ export function CommandPalette() {
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { workspaces, setActive } = useWorkspaceStore();
-  const { todos, toggle, add } = useTodosStore();
-  const { editMode, setEditMode } = useLayoutStore();
+  const workspaces = useWorkspaceStore((s) => s.workspaces);
+  const setActive = useWorkspaceStore((s) => s.setActive);
+  const todos = useTodosStore((s) => s.todos);
+  const toggle = useTodosStore((s) => s.toggle);
+  const add = useTodosStore((s) => s.add);
+  const editMode = useLayoutStore((s) => s.editMode);
+  const setEditMode = useLayoutStore((s) => s.setEditMode);
   const searchEngine = useSettingsStore((s) => s.searchEngine);
+
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
