@@ -6,6 +6,7 @@ import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock"
 import { useSettingsStore } from "@/stores/settings";
 import { useLayoutStore } from "@/stores/layout";
 import { OPEN_SETTINGS_EVENT } from "@/components/shell/CommandPalette";
+import { TABOS_VERSION, EXTENSION_ZIP } from "@/lib/version";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { SettingsSheet } from "./SettingsSheet";
 
