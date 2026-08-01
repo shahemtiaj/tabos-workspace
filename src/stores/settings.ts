@@ -24,6 +24,7 @@ type State = {
   fontFamily: FontFamily;
   uiScale: number; // 80 - 130 (%)
   bgDim: number; // 0 - 60 (% overlay opacity)
+  recentSearchLimit: number; // 0 - 10 recent search suggestions
   // Location
   locationMode: LocationMode;
   manualCity: string;
@@ -40,6 +41,7 @@ type State = {
   setFontFamily: (v: FontFamily) => void;
   setUiScale: (v: number) => void;
   setBgDim: (v: number) => void;
+  setRecentSearchLimit: (v: number) => void;
   setLocationMode: (v: LocationMode) => void;
   setManualCity: (v: string) => void;
   setManualLat: (v: number | null) => void;
@@ -60,6 +62,7 @@ export const useSettingsStore = create<State>()(
       fontFamily: "poppins",
       uiScale: 100,
       bgDim: 0,
+      recentSearchLimit: 5,
       locationMode: "auto",
       manualCity: "",
       manualLat: null,
@@ -75,6 +78,7 @@ export const useSettingsStore = create<State>()(
       setFontFamily: (fontFamily) => set({ fontFamily }),
       setUiScale: (uiScale) => set({ uiScale }),
       setBgDim: (bgDim) => set({ bgDim }),
+      setRecentSearchLimit: (recentSearchLimit) => set({ recentSearchLimit }),
       setLocationMode: (locationMode) => set({ locationMode }),
       setManualCity: (manualCity) => set({ manualCity }),
       setManualLat: (manualLat) => set({ manualLat }),

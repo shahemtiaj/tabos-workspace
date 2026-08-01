@@ -161,6 +161,22 @@ export function SettingsSheet({ open, onClose }: Props) {
                     <option value="bing" className="bg-neutral-900">Bing</option>
                   </select>
                 </Row>
+                <Row label="Recent search suggestions">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min={0}
+                      max={10}
+                      step={1}
+                      value={s.recentSearchLimit}
+                      onChange={(e) => s.setRecentSearchLimit(Number(e.target.value))}
+                      className="w-40 accent-indigo-500"
+                    />
+                    <span className="text-xs text-white/60 w-8 text-right">
+                      {s.recentSearchLimit === 0 ? "Off" : s.recentSearchLimit}
+                    </span>
+                  </div>
+                </Row>
                 <Row label="Show seconds on clock">
                   <input
                     type="checkbox"

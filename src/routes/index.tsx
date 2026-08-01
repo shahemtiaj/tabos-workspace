@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { TopBar } from "@/components/shell/TopBar";
 import { ExtensionDownloadBanner } from "@/components/shell/ExtensionDownloadBanner";
+import { SearchWidget } from "@/components/widgets/SearchWidget";
 import { BookmarksWidget } from "@/components/widgets/BookmarksWidget";
 import { ClockWidget } from "@/components/widgets/ClockWidget";
 import { WeatherWidget } from "@/components/widgets/WeatherWidget";
@@ -58,6 +59,7 @@ function NewTab() {
               gridAutoRows: "minmax(140px, auto)",
             }}
           >
+            <ResizableTile id="search"><SearchWidget /></ResizableTile>
             <ResizableTile id="bookmarks"><BookmarksWidget /></ResizableTile>
             <ResizableTile id="clock"><ClockWidget /></ResizableTile>
             <ResizableTile id="weather"><WeatherWidget /></ResizableTile>

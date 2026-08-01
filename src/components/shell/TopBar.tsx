@@ -6,7 +6,6 @@ import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock"
 import { useSettingsStore } from "@/stores/settings";
 import { useLayoutStore } from "@/stores/layout";
 import { OPEN_SETTINGS_EVENT } from "@/components/shell/CommandPalette";
-import { SearchBar } from "@/components/widgets/SearchBar";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { SettingsSheet } from "./SettingsSheet";
 
@@ -35,8 +34,7 @@ export function TopBar() {
           {hydrated && now ? `${greetingFor(now)}, ${userName}` : `Hello, ${userName}`}
         </h1>
       </div>
-      <div className="flex items-center gap-3 flex-wrap lg:flex-nowrap">
-        <SearchBar />
+      <div className="flex items-center gap-3 flex-wrap lg:flex-nowrap shrink-0">
         <WorkspaceSwitcher />
         <div className="flex items-center gap-1">
           <button
