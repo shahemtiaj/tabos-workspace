@@ -52,7 +52,7 @@ type State = {
 export const useSettingsStore = create<State>()(
   persist(
     (set) => ({
-      userName: "Shah",
+      userName: "User",
       searchEngine: "google",
       clockSeconds: false,
       clock24h: false,

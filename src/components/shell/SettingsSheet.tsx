@@ -470,7 +470,23 @@ export function SettingsSheet({ open, onClose }: Props) {
                   </button>
                 </form>
               </Section>
+
+              <div className="pt-1 pb-2 text-center">
+                <p className="text-[11px] text-white/45">
+                  Build With Love by{" "}
+                  <a
+                    href="https://shahemtiaj.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-white/80 hover:text-white underline underline-offset-2"
+                  >
+                    Shah Emtiaj
+                  </a>
+                </p>
+                <p className="text-[10px] text-white/30 mt-0.5">shahemtiaj.com</p>
+              </div>
             </div>
+
           </motion.aside>
         </>
       )}
