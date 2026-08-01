@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { X, Trash2, Plus, Copy, Locate, RotateCcw, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import { TABOS_VERSION } from "@/lib/version";
 import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
@@ -483,7 +484,9 @@ export function SettingsSheet({ open, onClose }: Props) {
                     Shah Emtiaj
                   </a>
                 </p>
-                <p className="text-[10px] text-white/30 mt-0.5">shahemtiaj.com</p>
+                <p className="text-[10px] text-white/30 mt-0.5">
+                  shahemtiaj.com · TabOS v{TABOS_VERSION}
+                </p>
               </div>
             </div>
 
