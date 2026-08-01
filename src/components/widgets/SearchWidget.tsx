@@ -21,7 +21,41 @@ function asUrl(input: string): string | null {
   return null;
 }
 
+/** Memoized row so typing doesn't re-render the whole suggestion list. */
+const SuggestionRow = memo(function SuggestionRow({
+  q,
+  onGo,
+  onRemove,
+}: {
+  q: string;
+  onGo: (q: string) => void;
+  onRemove: (q: string) => void;
+}) {
+  return (
+    <li className="flex items-center gap-1">
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => onGo(q)}
+        className="flex-1 min-w-0 truncate text-left text-sm px-3 py-2 rounded-2xl hover:bg-white/8 transition text-white/80"
+      >
+        {q}
+      </button>
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => onRemove(q)}
+        className="grid h-7 w-7 place-items-center rounded-full text-white/35 hover:text-white hover:bg-white/10 shrink-0"
+        aria-label={`Remove ${q}`}
+      >
+        <X className="h-3 w-3" />
+      </button>
+    </li>
+  );
+});
+
 /** Mandatory search widget: engine picker + recent-search suggestions. */
+
 export function SearchWidget() {
   const [q, setQ] = useState("");
   const [focused, setFocused] = useState(false);
