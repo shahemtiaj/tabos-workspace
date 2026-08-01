@@ -114,7 +114,7 @@ export function CommandPalette() {
     });
 
     return list;
-  }, [workspaces, todos, editMode, setActive, toggle, setEditMode]);
+  }, [open, workspaces, todos, editMode, setActive, toggle, setEditMode]);
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
