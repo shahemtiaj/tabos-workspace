@@ -137,27 +137,10 @@ export function SearchWidget() {
           </div>
           <ul className="space-y-1">
             {suggestions.map((r) => (
-              <li key={r.q} className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => go(r.q)}
-                  className="flex-1 min-w-0 truncate text-left text-sm px-3 py-2 rounded-2xl hover:bg-white/8 transition text-white/80"
-                >
-                  {r.q}
-                </button>
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => remove(r.q)}
-                  className="grid h-7 w-7 place-items-center rounded-full text-white/35 hover:text-white hover:bg-white/10 shrink-0"
-                  aria-label={`Remove ${r.q}`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </li>
+              <SuggestionRow key={r.q} q={r.q} onGo={go} onRemove={remove} />
             ))}
           </ul>
+
         </div>
       ) : (
         <p className="flex items-center gap-1.5 px-1 text-[11px] text-white/35">
