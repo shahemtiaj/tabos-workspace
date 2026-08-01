@@ -4,12 +4,18 @@ import { Toaster } from "@/components/ui/sonner";
 import { WorkspaceThemeSync } from "@/components/shell/WorkspaceThemeSync";
 import App from "./App";
 import "@/styles.css";
-// Preload the two fonts used by the app.
-const linkFonts = document.createElement("link");
-linkFonts.rel = "stylesheet";
-linkFonts.href =
-  "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap";
-document.head.appendChild(linkFonts);
+// Self-hosted fonts — Chrome Web Store forbids remotely hosted resources,
+// so every font is bundled inside the extension package (fully offline).
+import "@fontsource/poppins/latin-300.css";
+import "@fontsource/poppins/latin-400.css";
+import "@fontsource/poppins/latin-500.css";
+import "@fontsource/poppins/latin-600.css";
+import "@fontsource/poppins/latin-700.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/space-grotesk/latin-500.css";
+import "@fontsource/space-grotesk/latin-700.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

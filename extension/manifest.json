@@ -1,8 +1,22 @@
 {
   "manifest_version": 3,
   "name": "TabOS — New Tab Reimagined",
-  "version": "1.1.0",
-  "description": "Replace Chrome's new tab with a luxurious glass workspace: bookmarks, todos, consistency, focus timer, notes, and more.",
+  "short_name": "TabOS",
+  "version": "1.2.0",
+  "version_name": "1.2.0",
+  "description": "A premium glass new tab: workspaces, bookmarks, todos, streaks, focus timer, notes, weather and more. Fully offline.",
+  "author": "Shah Emtiaj",
+  "homepage_url": "https://shahemtiaj.com",
+  "minimum_chrome_version": "110",
+  "offline_enabled": true,
   "chrome_url_overrides": { "newtab": "newtab.html" },
-  "icons": { "16": "icon.png", "48": "icon.png", "128": "icon.png" }
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; base-uri 'self'; form-action 'none'"
+  }
 }
