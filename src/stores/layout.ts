@@ -15,7 +15,12 @@ export type WidgetId =
   | "worldClocks"
   | "quote"
   | "scratchpad"
-  | "heatmap";
+  | "heatmap"
+  | "countdown"
+  | "calculator"
+  | "ambient"
+  | "readLater"
+  | "water";
 
 export type Tile = { col: number; row: number };
 
@@ -38,6 +43,11 @@ const defaults: Record<WidgetId, Tile> = {
   quote: { col: 6, row: 1 },
   scratchpad: { col: 4, row: 2 },
   heatmap: { col: 8, row: 2 },
+  countdown: { col: 4, row: 2 },
+  calculator: { col: 3, row: 2 },
+  ambient: { col: 4, row: 1 },
+  readLater: { col: 5, row: 2 },
+  water: { col: 4, row: 2 },
 };
 
 // Which widgets are enabled/visible by default
@@ -54,9 +64,24 @@ const defaultEnabled: Record<WidgetId, boolean> = {
   quote: false,
   scratchpad: false,
   heatmap: false,
+  countdown: false,
+  calculator: false,
+  ambient: false,
+  readLater: false,
+  water: false,
 };
 
-export const OPTIONAL_WIDGETS: WidgetId[] = ["worldClocks", "quote", "scratchpad", "heatmap"];
+export const OPTIONAL_WIDGETS: WidgetId[] = [
+  "worldClocks",
+  "quote",
+  "scratchpad",
+  "heatmap",
+  "countdown",
+  "calculator",
+  "ambient",
+  "readLater",
+  "water",
+];
 
 type State = {
   tiles: Record<WidgetId, Tile>;

@@ -24,6 +24,11 @@ const OPTIONAL_META: Record<string, { label: string; desc: string }> = {
   quote: { label: "Daily Quote", desc: "Rotating inspiration" },
   scratchpad: { label: "Scratchpad", desc: "Fast throwaway notes" },
   heatmap: { label: "Habit Heatmap", desc: "13-week consistency grid" },
+  countdown: { label: "Countdowns", desc: "Days until your key dates" },
+  calculator: { label: "Calculator", desc: "Inline expression calculator" },
+  ambient: { label: "Focus Sounds", desc: "Rain / brown noise / waves" },
+  readLater: { label: "Read Later", desc: "Stash links to read next" },
+  water: { label: "Hydration", desc: "Daily water intake tracker" },
 };
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
