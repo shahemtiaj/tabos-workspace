@@ -162,6 +162,18 @@ export const useLayoutStore = create<State>()(
       setEditMode: (editMode) => set({ editMode }),
       reset: () => set({ tiles: defaults, enabled: defaultEnabled }),
     }),
-    { name: "tabos-layout-v2", storage },
+    {
+      name: "tabos-layout-v2",
+      storage,
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<State>;
+        return {
+          ...current,
+          ...p,
+          tiles: { ...defaults, ...(p.tiles ?? {}) },
+          enabled: { ...defaultEnabled, ...(p.enabled ?? {}) },
+        };
+      },
+    },
   ),
 );

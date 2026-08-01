@@ -17,8 +17,10 @@ type Props = { id: WidgetId; children: ReactNode };
 const ROW_HEIGHT = 148; // matches gridAutoRows base + gap
 const GAP = 20;
 
+const FALLBACK_TILE: Tile = { col: 4, row: 2 };
+
 export function ResizableTile({ id, children }: Props) {
-  const tile = useLayoutStore((s) => s.tiles[id]);
+  const tile = useLayoutStore((s) => s.tiles[id]) ?? FALLBACK_TILE;
   const enabled = useLayoutStore((s) => s.enabled[id]);
   const editMode = useLayoutStore((s) => s.editMode);
   const setTile = useLayoutStore((s) => s.setTile);
