@@ -1,74 +1,136 @@
-## Goal
-Replace hover-based resize with a global **Edit Mode** (toggled via a pencil icon in the TopBar). In edit mode, every tile becomes freely resizable via drag handles on the corners/edges — not just fixed S/M/L presets. Add a curated set of **optional widgets** togglable from Settings.
+Paste the code below into Blogger’s **HTML view** (not Compose view) of a page or post. It uses inline CSS so it will render correctly on Blogger without needing external stylesheets.
 
-## 1. New Edit Mode UX
+````html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabOS Privacy Policy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+        }
+        h1 {
+            color: #1a1a2e;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 10px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #4f46e5;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        p {
+            margin: 14px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .updated {
+            color: #666666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .highlight {
+            background: #eef2ff;
+            padding: 16px;
+            border-left: 4px solid #4f46e5;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TabOS — Privacy Policy</h1>
+    <p class="updated">Last updated: August 1, 2026</p>
 
-- Add a `Pencil` (Edit) icon in `TopBar` and `ExtTopBar`, next to Settings.
-- Toggling it flips `useLayoutStore.editMode`.
-- When ON:
-  - A soft dashed outline appears around every tile.
-  - Tiles show a **drag-resize handle** at the bottom-right corner (and right + bottom edges).
-  - Tiles show a Hide (eye-off) button top-right.
-  - A floating bottom bar appears: "Editing layout — Reset · Done".
-- When OFF: clean view, no handles, hidden tiles disappear.
+    <div class="highlight">
+        <p><strong>TabOS is a Chrome new tab replacement. We do not collect, transmit, sell, or share any personal data.</strong> There is no analytics, no tracking, no account, and no server owned by us.</p>
+    </div>
 
-Hover-only resize buttons removed.
+    <h2>What data TabOS stores</h2>
+    <p>Everything you create — workspaces, bookmarks, todos, notes, habits, timers, recent searches, and settings — is stored <strong>locally in your browser</strong> (extension local storage). It never leaves your device and is removed when you uninstall the extension.</p>
 
-## 2. Free Resize System
+    <h2>Network requests</h2>
+    <p>TabOS requests no Chrome permissions. It only makes these outbound requests, and only when the related widget is enabled:</p>
+    <table>
+        <tr>
+            <th>Purpose</th>
+            <th>Endpoint</th>
+            <th>Data sent</th>
+        </tr>
+        <tr>
+            <td>Weather forecast</td>
+            <td>api.open-meteo.com</td>
+            <td>Approximate latitude/longitude</td>
+        </tr>
+        <tr>
+            <td>City search</td>
+            <td>geocoding-api.open-meteo.com</td>
+            <td>The city name you type</td>
+        </tr>
+        <tr>
+            <td>Approximate location (optional)</td>
+            <td>get.geojs.io</td>
+            <td>Your IP address (by the nature of the request)</td>
+        </tr>
+        <tr>
+            <td>Bookmark icons</td>
+            <td>google.com/s2/favicons</td>
+            <td>The domain of bookmarks you added</td>
+        </tr>
+        <tr>
+            <td>Search</td>
+            <td>Your chosen engine (Google, DuckDuckGo, Brave, Bing)</td>
+            <td>Only the query you submit</td>
+        </tr>
+    </table>
+    <p>You can disable the Weather and Read Later widgets in Settings to stop all optional network activity. Nothing is sent in the background.</p>
 
-Replace the 5 fixed sizes with a **grid span pair** stored per widget:
+    <h2>Permissions</h2>
+    <p>TabOS declares <strong>no permissions</strong> in its manifest. It cannot read your browsing history, tabs, cookies, or page content.</p>
 
-```ts
-tiles: Record<WidgetId, { col: number; row: number }>  // col 2–12, row 1–4
-```
+    <h2>Contact</h2>
+    <p>Shah Emtiaj — <a href="https://shahemtiaj.com" target="_blank" rel="noopener noreferrer">https://shahemtiaj.com</a></p>
+</body>
+</html>
+````
 
-Implementation:
-- Pointer-drag on the SE handle updates `{col, row}` live.
-- Snap to the 12-col grid: `col = clamp(round(pxDelta / cellWidth) + startCol, 2, 12)`.
-- `row = clamp(round(pyDelta / rowHeight) + startRow, 1, 4)`.
-- Uses `PointerEvent` capture; writes to store on drag-end (throttled during drag via local state to keep it 60fps).
-- Migration: map old `TileSize` → `{col,row}` via existing `SIZE_SPANS`.
+**How to use on Blogger:**
+1. Go to your Blogger dashboard → Pages → New Page.
+2. Switch the editor to **HTML view** (click the pencil/"HTML" icon).
+3. Paste the entire code block above.
+4. Publish the page and copy its URL for the Chrome Web Store "Privacy policy" field.
 
-Keyboard: arrow keys on a focused tile in edit mode adjust span by 1.
-
-## 3. Optional Widgets (togglable in Settings)
-
-Curated additions worth building — all fit the productivity-OS theme:
-
-| Widget | What it does |
-|---|---|
-| **Quick Launcher** | Cmd/Ctrl-K style command palette pinned as a tile |
-| **World Clocks** | Multi-timezone strip (add cities) |
-| **Calendar Peek** | Month grid, click day to jot a note |
-| **Habit Heatmap** | GitHub-style 90-day heatmap from consistency store |
-| **Quote of the Day** | Rotating quotes, refresh button |
-| **Crypto/Stocks Ticker** | Free API (CoinGecko), configurable symbols |
-| **Currency Converter** | Small utility using exchangerate.host |
-| **RSS Reader** | Latest 5 items from a user RSS URL |
-| **Scratchpad** | Ephemeral fast-notes (separate from Notes) |
-| **Music/Ambient** | Lofi/rain player with volume |
-
-Ship first pass: **World Clocks, Quote of the Day, Scratchpad, Habit Heatmap** (no external keys, no network flakiness). Others listed as "Coming soon" toggles.
-
-## 4. Settings additions
-
-New "Widgets" section in `SettingsSheet`:
-- List of all widgets (core + optional) with an on/off switch and a size readout.
-- "Reset layout" button.
-- Removes the per-widget size dropdown (edit mode handles that now).
-
-## 5. Files to touch
-
-- `src/stores/layout.ts` — rewrite: `tiles: {col,row}`, add `setTile`, keep `hidden`, `editMode`, migration from old shape.
-- `src/components/shell/ResizableTile.tsx` — swap span logic; add drag handle + edit outline; remove hover cycle button.
-- `src/components/shell/TopBar.tsx` + `extension-src/ExtTopBar.tsx` — add Edit pencil button.
-- `src/components/shell/EditModeBar.tsx` (new) — floating "Done / Reset" bar.
-- `src/components/shell/SettingsSheet.tsx` — new Widgets section, remove size dropdowns.
-- New widgets under `src/components/widgets/`: `WorldClocksWidget.tsx`, `QuoteWidget.tsx`, `ScratchpadWidget.tsx`, `HabitHeatmapWidget.tsx`.
-- `src/routes/index.tsx` + `extension-src/App.tsx` — render optional widgets conditionally from layout store.
-- Rebuild extension zip via `scripts/build-extension.sh`.
-
-## 6. Out of scope (for this pass)
-
-- Free X/Y positioning (drag-to-move). Grid-flow order stays automatic; only span is user-controlled. Can add later if wanted.
-- External-API widgets (crypto, RSS, weather-radar).
+This page matches the data disclosed in the extension's shipped `PRIVACY.md` and Settings privacy card.
