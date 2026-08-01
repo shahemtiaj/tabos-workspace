@@ -62,7 +62,10 @@ export function CommandPalette() {
   }, [open]);
 
   const items = useMemo<Item[]>(() => {
+    if (!open) return [];
     const list: Item[] = [];
+
+
 
     workspaces.forEach((w) => {
       list.push({
