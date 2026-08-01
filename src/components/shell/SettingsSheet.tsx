@@ -472,6 +472,18 @@ export function SettingsSheet({ open, onClose }: Props) {
                 </form>
               </Section>
 
+              <div
+                className="glass p-4 text-[11px] leading-relaxed text-white/50"
+                style={{ borderRadius: "var(--radius-card)" }}
+              >
+                <p className="text-white/70 font-medium mb-1">Privacy</p>
+                TabOS requests no browser permissions and collects no personal data.
+                Everything you create stays in local browser storage on this device.
+                Optional network calls happen only for weather (open-meteo.com),
+                approximate location (get.geojs.io), bookmark icons, and the search
+                engine you choose.
+              </div>
+
               <div className="pt-1 pb-2 text-center">
                 <p className="text-[11px] text-white/45">
                   Build With Love by{" "}
