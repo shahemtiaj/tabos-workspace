@@ -11,6 +11,12 @@ import { WorldClocksWidget } from "@/components/widgets/WorldClocksWidget";
 import { QuoteWidget } from "@/components/widgets/QuoteWidget";
 import { ScratchpadWidget } from "@/components/widgets/ScratchpadWidget";
 import { HabitHeatmapWidget } from "@/components/widgets/HabitHeatmapWidget";
+import { CountdownWidget } from "@/components/widgets/CountdownWidget";
+import { CalculatorWidget } from "@/components/widgets/CalculatorWidget";
+import { AmbientSoundWidget } from "@/components/widgets/AmbientSoundWidget";
+import { ReadLaterWidget } from "@/components/widgets/ReadLaterWidget";
+import { WaterWidget } from "@/components/widgets/WaterWidget";
+import { CommandPalette } from "@/components/shell/CommandPalette";
 import { ResizableTile } from "@/components/shell/ResizableTile";
 import { EditModeBar } from "@/components/shell/EditModeBar";
 import { BgDimOverlay } from "@/components/shell/WorkspaceThemeSync";
@@ -49,6 +55,11 @@ export default function App() {
             <ResizableTile id="quote"><QuoteWidget /></ResizableTile>
             <ResizableTile id="scratchpad"><ScratchpadWidget /></ResizableTile>
             <ResizableTile id="heatmap"><HabitHeatmapWidget /></ResizableTile>
+            <ResizableTile id="countdown"><CountdownWidget /></ResizableTile>
+            <ResizableTile id="calculator"><CalculatorWidget /></ResizableTile>
+            <ResizableTile id="ambient"><AmbientSoundWidget /></ResizableTile>
+            <ResizableTile id="readLater"><ReadLaterWidget /></ResizableTile>
+            <ResizableTile id="water"><WaterWidget /></ResizableTile>
           </motion.section>
         </AnimatePresence>
         <footer className="pt-4 pb-2 text-center text-[11px] text-white/30 uppercase tracking-[0.25em]">
@@ -56,6 +67,7 @@ export default function App() {
         </footer>
       </div>
       <EditModeBar />
+      <CommandPalette />
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import { Pencil, Settings, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
 import { useLayoutStore } from "@/stores/layout";
+import { OPEN_SETTINGS_EVENT } from "@/components/shell/CommandPalette";
 import { SearchBar } from "@/components/widgets/SearchBar";
 import { WorkspaceSwitcher } from "@/components/shell/WorkspaceSwitcher";
 import { SettingsSheet } from "@/components/shell/SettingsSheet";
@@ -16,6 +17,13 @@ export function ExtTopBar() {
   const editMode = useLayoutStore((s) => s.editMode);
   const setEditMode = useLayoutStore((s) => s.setEditMode);
   const [open, setOpen] = useState(false);
+
+  // Opened from the Cmd/Ctrl-K command palette
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener(OPEN_SETTINGS_EVENT, handler);
+    return () => window.removeEventListener(OPEN_SETTINGS_EVENT, handler);
+  }, []);
 
   return (
     <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
