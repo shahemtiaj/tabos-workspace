@@ -26,28 +26,34 @@ export function SearchWidget() {
   const [q, setQ] = useState("");
   const [focused, setFocused] = useState(false);
   const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { searchEngine, setSearchEngine, recentSearchLimit } = useSettingsStore();
-  const { recent, push, remove, clear } = useSearchStore();
+  const searchEngine = useSettingsStore((s) => s.searchEngine);
+  const setSearchEngine = useSettingsStore((s) => s.setSearchEngine);
+  const recentSearchLimit = useSettingsStore((s) => s.recentSearchLimit);
+  const recent = useSearchStore((s) => s.recent);
+  const push = useSearchStore((s) => s.push);
+  const remove = useSearchStore((s) => s.remove);
+  const clear = useSearchStore((s) => s.clear);
 
   const suggestions = useMemo(() => {
-    if (recentSearchLimit <= 0) return [];
+    if (!focused || recentSearchLimit <= 0) return [];
     const needle = q.trim().toLowerCase();
     const base = needle ? recent.filter((r) => r.q.toLowerCase().includes(needle)) : recent;
     return base.slice(0, recentSearchLimit);
-  }, [recent, q, recentSearchLimit]);
+  }, [recent, q, recentSearchLimit, focused]);
 
   const go = (query: string) => {
     const v = query.trim();
     if (!v) return;
-    push(v);
     const target = asUrl(v) ?? ENGINES[searchEngine].url(v);
-    // Navigate in the current tab; fall back if assign is blocked (sandboxed frames).
+    // Navigate first so Enter feels instant; persist history right after.
     try {
       window.location.assign(target);
     } catch {
       window.open(target, "_self") ?? window.open(target, "_blank", "noopener");
     }
+    setTimeout(() => push(v), 0);
   };
+
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
