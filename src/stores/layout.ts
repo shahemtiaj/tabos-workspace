@@ -178,6 +178,19 @@ export const useLayoutStore = create<State>()(
     {
       name: "tabos-layout-v2",
       storage,
+      version: 2,
+      migrate: (persisted, version) => {
+        const p = (persisted ?? {}) as Partial<State>;
+        // v2: calculator promoted to a core widget — enable it for existing users
+        if (version < 2) {
+          return {
+            ...p,
+            enabled: { ...(p.enabled ?? {}), calculator: true },
+            tiles: { ...(p.tiles ?? {}), calculator: defaults.calculator },
+          } as State;
+        }
+        return p as State;
+      },
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<State>;
         const enabled = { ...defaultEnabled, ...(p.enabled ?? {}) };
@@ -190,5 +203,6 @@ export const useLayoutStore = create<State>()(
         };
       },
     },
+
   ),
 );
