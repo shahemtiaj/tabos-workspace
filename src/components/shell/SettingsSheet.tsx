@@ -483,7 +483,9 @@ export function SettingsSheet({ open, onClose }: Props) {
                     Shah Emtiaj
                   </a>
                 </p>
-                <p className="text-[10px] text-white/30 mt-0.5">shahemtiaj.com</p>
+                <p className="text-[10px] text-white/30 mt-0.5">
+                  shahemtiaj.com · TabOS v{TABOS_VERSION}
+                </p>
               </div>
             </div>
 

@@ -70,7 +70,7 @@ export function ExtensionDownloadBanner() {
         }}
       >
         <Download className="h-4 w-4" />
-        Download .zip
+        Download v{TABOS_VERSION}
       </button>
     </div>
   );
