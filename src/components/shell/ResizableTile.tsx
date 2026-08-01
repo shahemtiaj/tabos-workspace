@@ -8,6 +8,7 @@ import {
   MIN_ROW,
   MAX_ROW,
   type WidgetId,
+  MANDATORY_WIDGETS,
   type Tile,
 } from "@/stores/layout";
 import { cn } from "@/lib/utils";
@@ -77,7 +78,9 @@ export function ResizableTile({ id, children }: Props) {
     [id, setTile, tile.col, tile.row],
   );
 
-  if (!enabled) return null;
+  const mandatory = MANDATORY_WIDGETS.includes(id);
+
+  if (!enabled && !mandatory) return null;
 
   const active = drag ?? tile;
 
@@ -99,6 +102,7 @@ export function ResizableTile({ id, children }: Props) {
 
       {editMode && (
         <>
+          {!mandatory && (
           <div className="absolute top-2 right-2 flex items-center gap-1 z-30">
             <button
               type="button"
@@ -110,6 +114,7 @@ export function ResizableTile({ id, children }: Props) {
               <EyeOff className="h-3 w-3" />
             </button>
           </div>
+          )}
           <div className="absolute bottom-1 left-2 text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full glass-subtle text-white/70 z-30 pointer-events-none">
             {active.col}×{active.row}
           </div>

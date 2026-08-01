@@ -3,6 +3,7 @@ import { persist, type PersistStorage } from "zustand/middleware";
 
 export type WidgetId =
   // core
+  | "search"
   | "bookmarks"
   | "clock"
   | "weather"
@@ -31,6 +32,7 @@ export const MAX_ROW = 6;
 
 // Default sizes (col of 12, row units of ~140px)
 const defaults: Record<WidgetId, Tile> = {
+  search: { col: 12, row: 1 },
   bookmarks: { col: 8, row: 2 },
   clock: { col: 4, row: 1 },
   weather: { col: 4, row: 1 },
@@ -52,6 +54,7 @@ const defaults: Record<WidgetId, Tile> = {
 
 // Which widgets are enabled/visible by default
 const defaultEnabled: Record<WidgetId, boolean> = {
+  search: true,
   bookmarks: true,
   clock: true,
   weather: true,
@@ -70,6 +73,9 @@ const defaultEnabled: Record<WidgetId, boolean> = {
   readLater: false,
   water: false,
 };
+
+// Widgets that cannot be hidden
+export const MANDATORY_WIDGETS: WidgetId[] = ["search"];
 
 export const OPTIONAL_WIDGETS: WidgetId[] = [
   "worldClocks",
@@ -157,8 +163,15 @@ export const useLayoutStore = create<State>()(
           },
         })),
       toggleEnabled: (id) =>
-        set((s) => ({ enabled: { ...s.enabled, [id]: !s.enabled[id] } })),
-      setEnabled: (id, v) => set((s) => ({ enabled: { ...s.enabled, [id]: v } })),
+        set((s) =>
+          MANDATORY_WIDGETS.includes(id)
+            ? s
+            : { enabled: { ...s.enabled, [id]: !s.enabled[id] } },
+        ),
+      setEnabled: (id, v) =>
+        set((s) =>
+          MANDATORY_WIDGETS.includes(id) ? s : { enabled: { ...s.enabled, [id]: v } },
+        ),
       setEditMode: (editMode) => set({ editMode }),
       reset: () => set({ tiles: defaults, enabled: defaultEnabled }),
     }),
@@ -167,11 +180,13 @@ export const useLayoutStore = create<State>()(
       storage,
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<State>;
+        const enabled = { ...defaultEnabled, ...(p.enabled ?? {}) };
+        for (const m of MANDATORY_WIDGETS) enabled[m] = true;
         return {
           ...current,
           ...p,
           tiles: { ...defaults, ...(p.tiles ?? {}) },
-          enabled: { ...defaultEnabled, ...(p.enabled ?? {}) },
+          enabled,
         };
       },
     },
