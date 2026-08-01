@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { X, Trash2, Plus, Copy, Locate, RotateCcw, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import { TABOS_VERSION } from "@/lib/version";
 import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
