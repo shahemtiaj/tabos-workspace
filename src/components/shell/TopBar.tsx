@@ -41,7 +41,7 @@ export function TopBar() {
             type="button"
             onClick={() => {
               toast.loading("Preparing extension…", { id: "ext-dl" });
-              fetch("/tabos-extension.zip")
+              fetch(`/${EXTENSION_ZIP}?v=${TABOS_VERSION}`, { cache: "no-store" })
                 .then((res) => {
                   if (!res.ok) throw new Error(`Download failed: ${res.status}`);
                   return res.blob();
@@ -49,7 +49,7 @@ export function TopBar() {
                 .then((blob) => {
                   const a = document.createElement("a");
                   a.href = URL.createObjectURL(blob);
-                  a.download = "tabos-extension.zip";
+                  a.download = EXTENSION_ZIP;
                   a.click();
                   URL.revokeObjectURL(a.href);
                   toast.success(
