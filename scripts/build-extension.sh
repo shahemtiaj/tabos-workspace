@@ -8,7 +8,7 @@ ZIP="tabos-extension-v${VERSION}.zip"
 echo "→ Building TabOS extension v${VERSION}"
 
 echo "→ Cleaning old hashed assets…"
-rm -f extension/assets/index-*.js extension/assets/index-*.css
+rm -rf extension/assets
 
 echo "→ Building extension bundle…"
 (cd extension-src && bunx vite build)
