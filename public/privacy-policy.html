@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabOS Privacy Policy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+        }
+        h1 {
+            color: #1a1a2e;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 10px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #4f46e5;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        p {
+            margin: 14px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .updated {
+            color: #666666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .highlight {
+            background: #eef2ff;
+            padding: 16px;
+            border-left: 4px solid #4f46e5;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TabOS — Privacy Policy</h1>
+    <p class="updated">Last updated: August 1, 2026</p>
+
+    <div class="highlight">
+        <p><strong>TabOS is a Chrome new tab replacement. We do not collect, transmit, sell, or share any personal data.</strong> There is no analytics, no tracking, no account, and no server owned by us.</p>
+    </div>
+
+    <h2>What data TabOS stores</h2>
+    <p>Everything you create — workspaces, bookmarks, todos, notes, habits, timers, recent searches, and settings — is stored <strong>locally in your browser</strong> (extension local storage). It never leaves your device and is removed when you uninstall the extension.</p>
+
+    <h2>Network requests</h2>
+    <p>TabOS requests no Chrome permissions. It only makes these outbound requests, and only when the related widget is enabled:</p>
+    <table>
+        <tr>
+            <th>Purpose</th>
+            <th>Endpoint</th>
+            <th>Data sent</th>
+        </tr>
+        <tr>
+            <td>Weather forecast</td>
+            <td>api.open-meteo.com</td>
+            <td>Approximate latitude/longitude</td>
+        </tr>
+        <tr>
+            <td>City search</td>
+            <td>geocoding-api.open-meteo.com</td>
+            <td>The city name you type</td>
+        </tr>
+        <tr>
+            <td>Approximate location (optional)</td>
+            <td>get.geojs.io</td>
+            <td>Your IP address (by the nature of the request)</td>
+        </tr>
+        <tr>
+            <td>Bookmark icons</td>
+            <td>google.com/s2/favicons</td>
+            <td>The domain of bookmarks you added</td>
+        </tr>
+        <tr>
+            <td>Search</td>
+            <td>Your chosen engine (Google, DuckDuckGo, Brave, Bing)</td>
+            <td>Only the query you submit</td>
+        </tr>
+    </table>
+    <p>You can disable the Weather and Read Later widgets in Settings to stop all optional network activity. Nothing is sent in the background.</p>
+
+    <h2>Permissions</h2>
+    <p>TabOS declares <strong>no permissions</strong> in its manifest. It cannot read your browsing history, tabs, cookies, or page content.</p>
+
+    <h2>Contact</h2>
+    <p>Shah Emtiaj — <a href="https://shahemtiaj.com" target="_blank" rel="noopener noreferrer">https://shahemtiaj.com</a></p>
+</body>
+</html>
