@@ -2,6 +2,11 @@
 set -e
 cd "$(dirname "$0")/.."
 
+VERSION=$(node -p "require('./extension/manifest.json').version")
+ZIP="tabos-extension-v${VERSION}.zip"
+
+echo "→ Building TabOS extension v${VERSION}"
+
 echo "→ Cleaning old hashed assets…"
 rm -f extension/assets/index-*.js extension/assets/index-*.css
 
@@ -12,12 +17,11 @@ echo "→ Building extension bundle…"
 if [ -f extension/index.html ]; then
   mv -f extension/index.html extension/newtab.html
 fi
-# Strip stray files
 rm -f extension/favicon.ico
 
 echo "→ Packaging zip…"
 mkdir -p public
-rm -f public/tabos-extension.zip
-(cd extension && nix run nixpkgs#zip -- -qr /dev-server/public/tabos-extension.zip .)
+rm -f public/tabos-extension*.zip
+(cd extension && nix run nixpkgs#zip -- -qr "/dev-server/public/${ZIP}" .)
 
-echo "✓ public/tabos-extension.zip ($(du -h public/tabos-extension.zip | cut -f1))"
+echo "✓ public/${ZIP} ($(du -h "public/${ZIP}" | cut -f1))"
