@@ -64,7 +64,7 @@ export const WORKSPACE_PRESETS: Workspace[] = [
       bm("Perplexity", "https://perplexity.ai"),
       bm("Cursor", "https://cursor.sh"),
       bm("GitHub", "https://github.com"),
-      bm("Lovable", "https://lovable.dev"),
+      bm("Hugging Face", "https://huggingface.co"),
       bm("Bolt", "https://bolt.new"),
       bm("v0", "https://v0.dev"),
     ],
