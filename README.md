@@ -1,29 +1,80 @@
-# Welcome to your Lovable project
+# TabOS — Your New Tab, Reimagined
 
-This project was built with [Lovable](https://lovable.dev).
+TabOS replaces Chrome's default New Tab with a premium, glassmorphic productivity workspace: bookmarks, tasks, notes, focus timer, weather, and a whole bento grid of widgets you can resize and rearrange.
 
-## Build with Lovable
+Built by [Shah Emtiaj](https://shahemtiaj.com) · v1.2.0
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+---
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Highlights
+
+- **Workspaces** — Default, AI, Video, Design, Dev, Study and Business profiles, each with its own accent, wallpaper tint and bookmark set.
+- **Bento grid layout** — free-form resizing with drag handles in Edit Mode; every widget snaps to a 12-column grid.
+- **Command palette** — `Ctrl/Cmd + K` to jump to workspaces, bookmarks, todos and settings.
+- **Productivity widgets** — Todos with priorities and a progress ring, Consistency tracker with streaks and heatmap, Markdown notes with clickable links, Scratchpad, Read Later, Countdown, Hydration tracker.
+- **Focus tools** — circular Pomodoro timer and procedural ambient sounds (rain, brown noise, waves) generated offline via Web Audio.
+- **Scientific calculator** — trigonometry, logs, roots, factorials, constants, DEG/RAD toggle, memory keys and history.
+- **Clocks & weather** — digital/analog clock, multi-timezone world clocks, animated weather with manual or IP-based location.
+- **Search** — Google, DuckDuckGo, Brave or Bing, with recent-search suggestions and direct URL detection.
+- **Deep customization** — blur, glass intensity, corner radius, fonts, UI scale, background dimming, per-widget visibility.
+
+## Privacy
+
+TabOS requests **no Chrome permissions** and collects no analytics. All data lives in local browser storage. The only outbound requests are optional: Open-Meteo (weather), GeoJS (IP location, only if you enable auto-detect) and Google favicons (bookmark icons). See [`extension/PRIVACY.md`](extension/PRIVACY.md).
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | React 19 + TanStack Start (web) / standalone Vite SPA (extension) |
+| Styling | Tailwind CSS v4 with semantic design tokens |
+| State | Zustand with persisted stores |
+| Animation | Motion for React |
+| Extension | Manifest V3, `chrome_url_overrides` only |
+
+## Project structure
+
+```text
+src/
+  components/
+    glass/      Glass primitives (panels, cards)
+    shell/      TopBar, command palette, settings, edit mode, tiles
+    widgets/    Every dashboard widget
+  stores/       Zustand stores (workspace, layout, todos, notes, …)
+  lib/          Design tokens, workspace presets, version, utils
+  routes/       TanStack Start file-based routes
+extension-src/  Standalone MV3 build entry (reuses src/ widgets)
+extension/      Built MV3 package (manifest, icons, assets)
+scripts/        build-extension.sh — compiles and zips the release
+```
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 20+ and npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm install
+npm run dev      # web app at http://localhost:8080
+npm run build    # production web build
+npm run lint
 ```
 
-## Built with
+## Building the Chrome extension
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+```sh
+./scripts/build-extension.sh
+```
+
+This compiles `extension-src/` into a self-contained SPA, writes it into `extension/`, and produces `public/tabos-extension-v<version>.zip`. Version comes from `src/lib/version.ts` and `extension/manifest.json` — bump both on release.
+
+### Install locally
+
+1. Download or build the zip and unzip it.
+2. Open `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select the unzipped folder.
+5. Open a new tab.
+
+## License
+
+All rights reserved © Shah Emtiaj.
