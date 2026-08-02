@@ -124,7 +124,7 @@ export const WORKSPACE_PRESETS: Workspace[] = [
       bm("Stack Overflow", "https://stackoverflow.com"),
       bm("MDN", "https://developer.mozilla.org"),
       bm("Vercel", "https://vercel.com"),
-      bm("Lovable", "https://lovable.dev"),
+      bm("Netlify", "https://netlify.com"),
       bm("Cursor", "https://cursor.sh"),
       bm("npm", "https://npmjs.com"),
       bm("CodeSandbox", "https://codesandbox.io"),
