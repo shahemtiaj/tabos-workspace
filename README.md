@@ -1,528 +1,80 @@
-# TabOS Workspace
-
-Design the complete architecture, folder structure, UI system, component hierarchy, state management, and development roadmap before writing any code.
-
-Design a premium Chrome New Tab Extension called "TabOS".
-
-The goal is to completely replace the default chrome://newtab page with a modern productivity operating system, not just another dashboard.
-
-==========================================================
-
-DESIGN LANGUAGE
-
-==========================================================
-
-Use Apple's latest Human Interface Design combined with Google's Material Design 3.
-
-The UI should feel like a native macOS application with Material 3 usability.
-
-Prioritize:
-
-• Glassmorphism
-
-• Large rounded corners (24–32px)
-
-• Floating glass panels
-
-• Layered depth
-
-• Soft shadows
-
-• Frosted blur
-
-• Smooth animations
-
-• Premium spacing
-
-• Excellent typography
-
-• Adaptive color system
-
-• Modern gradients
-
-• Minimalism
-
-• High information hierarchy
-
-• Zero visual clutter
-
-Everything should feel luxurious, premium and highly polished.
-
-No old dashboard style.
-
-No Bootstrap look.
-
-No Windows 10 look.
-
-No generic admin template.
-
-==========================================================
-
-LAYOUT
-
-==========================================================
-
-Top Area
-
-Greeting
-
-Good Morning, Shah
-
-Current Time
-
-Current Date
-
-Workspace Switcher
-
-Quick Search
-
-Settings Button
-
-Profile Button
-
-==========================================================
-
-WORKSPACE SYSTEM
-
-==========================================================
-
-The entire interface changes depending on the selected workspace.
-
-Built-in Workspaces:
-
-• Default
-
-• AI
-
-• Video Editing
-
-• Graphic Design
-
-• Development
-
-• Study
-
-• Business
-
-Each workspace contains
-
-Unique wallpaper
-
-Unique accent color
-
-Unique glass tint
-
-Unique bookmark collection
-
-Unique widgets
-
-Unique quick actions
-
-Users can
-
-Create unlimited workspaces
-
-Rename
-
-Duplicate
-
-Delete
-
-Import
-
-Export
-
-Choose wallpaper
-
-Choose theme color
-
-Choose icon
-
-==========================================================
-
-BOOKMARK SECTION
-
-==========================================================
-
-Large premium bookmark cards.
-
-Each bookmark displays
-
-Website logo
-
-Title
-
-Hover animation
-
-Right click menu
-
-Drag and Drop sorting
-
-Examples
-
-AI Workspace
-
-ChatGPT
-
-Claude
-
-Gemini
-
-Perplexity
-
-Cursor
-
-Github
-
-Lovable
-
-Bolt
-
-V0
-
-Video Editing Workspace
-
-Premiere Pro
-
-After Effects
-
-Frame.io
-
-Envato
-
-Motion Array
-
-Artlist
-
-Epidemic Sound
-
-Pixabay
-
-Pexels
-
-Graphic Design Workspace
-
-Figma
-
-Canva
-
-Photoshop
-
-Illustrator
-
-Freepik
-
-Icons8
-
-Flaticon
-
-Remove.bg
-
-==========================================================
-
-TODO SYSTEM
-
-==========================================================
-
-Built-in task manager.
-
-Beautiful Material 3 cards.
-
-Features
-
-Today's Tasks
-
-Upcoming
-
-Recurring
-
-Priority
-
-Subtasks
-
-Progress Ring
-
-Quick Add
-
-Drag to reorder
-
-Completion animation
-
-==========================================================
-
-CONSISTENCY TRACKER
-
-==========================================================
-
-Track daily rules instead of habits.
-
-Examples
-
-Go to Gym
-
-Code 3 Hours
-
-Read Book
-
-Sleep Before 11 PM
-
-Current Streak
-
-Longest Streak
-
-Weekly Heatmap
-
-Monthly Statistics
-
-Consistency Score
-
-Beautiful charts.
-
-==========================================================
-
-CLOCK
-
-==========================================================
-
-Beautiful floating digital clock.
-
-Optional analog mode.
-
-Seconds toggle.
-
-24 hour and 12 hour support.
-
-==========================================================
-
-NOTES
-
-==========================================================
-
-Quick Notes
-
-Markdown support
-
-Checklist
-
-Autosave
-
-==========================================================
-
-POMODORO
-
-==========================================================
-
-Beautiful circular timer.
-
-25/5
-
-50/10
-
-Custom
-
-Floating animation.
-
-==========================================================
-
-WEATHER
-
-==========================================================
-
-Minimal weather widget.
-
-Temperature
-
-Condition
-
-Location
-
-Animated icons.
-
-==========================================================
-
-SEARCH
-
-==========================================================
-
-Beautiful floating search bar.
-
-Supports
-
-Google
-
-DuckDuckGo
-
-Brave
-
-Bing
-
-Custom Search Engine
-
-==========================================================
-
-RECENT ACTIVITY
-
-==========================================================
-
-Recently visited websites
-
-Pinned websites
-
-Frequently visited websites
-
-==========================================================
-
-CUSTOMIZATION
-
-==========================================================
-
-Users can customize
-
-Wallpaper
-
-Accent color
-
-Glass intensity
-
-Blur amount
-
-Transparency
-
-Widget visibility
-
-Widget order
-
-Widget size
-
-Corner radius
-
-Font
-
-Animation speed
-
-Theme
-
-Workspace icon
-
-Bookmark layout
-
-==========================================================
-
-ANIMATIONS
-
-==========================================================
-
-Everything should feel alive.
-
-Use
-
-Spring animations
-
-Smooth fades
-
-Material motion
-
-Apple easing
-
-Hover lift
-
-Micro interactions
-
-Soft scaling
-
-Ripple effects
-
-Blur transitions
-
-==========================================================
-
-RESPONSIVE
-
-==========================================================
-
-Perfect on
-
-1080p
-
-1440p
-
-4K
-
-Ultrawide
-
-Laptops
-
-Small displays
-
-==========================================================
-
-TECH
-
-==========================================================
-
-Chrome Extension Manifest V3
-
-Material Design 3
-
-Apple inspired UI
-
-Local storage
-
-Chrome Sync
-
-Component based architecture
-
-Lazy loading
-
-Dark mode
-
-Light mode
-
-Automatic theme switching
-
-==========================================================
-
-IMPORTANT
-
-==========================================================
-
-Do NOT create a traditional admin dashboard.
-
-Do NOT make it look like Notion.
-
-Do NOT make it look like Windows widgets.
-
-Do NOT make it look like Bootstrap.
-
-Do NOT use sharp corners.
-
-Do NOT overcrowd the interface.
-
-Every component should feel like a premium operating system built specifically for Chrome's New Tab page.
-
-Think of it as:
-
-Apple + Material 3 + Arc Browser + Raycast + Linear + macOS + Windows 11 Fluent Design
-
-The final result should look like a luxury browser workspace that users will want to keep open all day.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/f47e0d90-064b-4ce3-ba1c-d578f0530634).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+# TabOS — Your New Tab, Reimagined
+
+TabOS replaces Chrome's default New Tab with a premium, glassmorphic productivity workspace: bookmarks, tasks, notes, focus timer, weather, and a whole bento grid of widgets you can resize and rearrange.
+
+Built by [Shah Emtiaj](https://shahemtiaj.com) · v1.2.0
+
+---
+
+## Highlights
+
+- **Workspaces** — Default, AI, Video, Design, Dev, Study and Business profiles, each with its own accent, wallpaper tint and bookmark set.
+- **Bento grid layout** — free-form resizing with drag handles in Edit Mode; every widget snaps to a 12-column grid.
+- **Command palette** — `Ctrl/Cmd + K` to jump to workspaces, bookmarks, todos and settings.
+- **Productivity widgets** — Todos with priorities and a progress ring, Consistency tracker with streaks and heatmap, Markdown notes with clickable links, Scratchpad, Read Later, Countdown, Hydration tracker.
+- **Focus tools** — circular Pomodoro timer and procedural ambient sounds (rain, brown noise, waves) generated offline via Web Audio.
+- **Scientific calculator** — trigonometry, logs, roots, factorials, constants, DEG/RAD toggle, memory keys and history.
+- **Clocks & weather** — digital/analog clock, multi-timezone world clocks, animated weather with manual or IP-based location.
+- **Search** — Google, DuckDuckGo, Brave or Bing, with recent-search suggestions and direct URL detection.
+- **Deep customization** — blur, glass intensity, corner radius, fonts, UI scale, background dimming, per-widget visibility.
+
+## Privacy
+
+TabOS requests **no Chrome permissions** and collects no analytics. All data lives in local browser storage. The only outbound requests are optional: Open-Meteo (weather), GeoJS (IP location, only if you enable auto-detect) and Google favicons (bookmark icons). See [`extension/PRIVACY.md`](extension/PRIVACY.md).
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | React 19 + TanStack Start (web) / standalone Vite SPA (extension) |
+| Styling | Tailwind CSS v4 with semantic design tokens |
+| State | Zustand with persisted stores |
+| Animation | Motion for React |
+| Extension | Manifest V3, `chrome_url_overrides` only |
+
+## Project structure
+
+```text
+src/
+  components/
+    glass/      Glass primitives (panels, cards)
+    shell/      TopBar, command palette, settings, edit mode, tiles
+    widgets/    Every dashboard widget
+  stores/       Zustand stores (workspace, layout, todos, notes, …)
+  lib/          Design tokens, workspace presets, version, utils
+  routes/       TanStack Start file-based routes
+extension-src/  Standalone MV3 build entry (reuses src/ widgets)
+extension/      Built MV3 package (manifest, icons, assets)
+scripts/        build-extension.sh — compiles and zips the release
+```
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 20+ and npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm install
+npm run dev      # web app at http://localhost:8080
+npm run build    # production web build
+npm run lint
 ```
+
+## Building the Chrome extension
+
+```sh
+./scripts/build-extension.sh
+```
+
+This compiles `extension-src/` into a self-contained SPA, writes it into `extension/`, and produces `public/tabos-extension-v<version>.zip`. Version comes from `src/lib/version.ts` and `extension/manifest.json` — bump both on release.
+
+### Install locally
+
+1. Download or build the zip and unzip it.
+2. Open `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select the unzipped folder.
+5. Open a new tab.
+
+## License
+
+All rights reserved © Shah Emtiaj.
