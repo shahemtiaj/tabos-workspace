@@ -203,6 +203,13 @@ export function CalculatorWidget() {
         </span>
         <div className="flex items-center gap-1.5">
           <button
+            onClick={() => setShowSci((v) => !v)}
+            className={`glass-subtle h-7 px-2 rounded-full text-[10px] hover:bg-white/10 uppercase ${showSci ? "text-white/90" : "text-white/50"}`}
+            title="Toggle scientific keys"
+          >
+            fx
+          </button>
+          <button
             onClick={() => setMode((m) => (m === "deg" ? "rad" : "deg"))}
             className="glass-subtle h-7 px-2 rounded-full text-[10px] hover:bg-white/10 uppercase"
             title="Angle unit"
