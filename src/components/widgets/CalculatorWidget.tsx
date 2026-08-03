@@ -158,6 +158,7 @@ export function CalculatorWidget() {
   const [mode, setMode] = useState<Mode>("deg");
   const [mem, setMem] = useState(0);
   const [showHistory, setShowHistory] = useState(false);
+  const [showSci, setShowSci] = useState(false);
   const [copied, setCopied] = useState(false);
   const { history, push, clear } = useCalculatorStore();
 
