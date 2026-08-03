@@ -261,13 +261,15 @@ export function CalculatorWidget() {
         {mem !== 0 && <span className="ml-auto font-mono text-white/50">M {fmt(mem)}</span>}
       </div>
 
-      <div className="mt-2 grid grid-cols-5 gap-1.5">
-        {SCI.map(({ k, label }) => (
-          <button key={k} onClick={() => press(k)} className={`${btn} py-1.5 text-[12px] text-white/75`}>
-            {label}
-          </button>
-        ))}
-      </div>
+      {showSci && (
+        <div className="mt-2 grid grid-cols-5 gap-1.5">
+          {SCI.map(({ k, label }) => (
+            <button key={k} onClick={() => press(k)} className={`${btn} py-1.5 text-[12px] text-white/75`}>
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="mt-1.5 grid grid-cols-5 gap-1.5 flex-1 min-h-0">
         <button onClick={() => setExpr((e) => e.slice(0, -1))} className={`${btn} grid place-items-center`} aria-label="Backspace">
@@ -284,23 +286,26 @@ export function CalculatorWidget() {
           ±
         </button>
 
-        {PAD.map(({ k, label, kind }) => (
-          <button
-            key={k}
-            onClick={() => press(k)}
-            className={`${btn} py-2 ${kind === "op" ? "text-white/70" : "text-white/90"}`}
-          >
-            {label ?? k}
-          </button>
-        ))}
+        <div className="col-span-4 grid grid-cols-4 grid-rows-4 gap-1.5">
+          {PAD.map(({ k, label, kind }) => (
+            <button
+              key={k}
+              onClick={() => press(k)}
+              className={`${btn} py-2 ${kind === "op" ? "text-white/70" : "text-white/90"}`}
+            >
+              {label ?? k}
+            </button>
+          ))}
+        </div>
         <button
           onClick={equals}
-          className="rounded-xl text-sm text-white font-semibold row-span-4 active:scale-[0.97] transition-transform"
+          className="rounded-xl text-sm text-white font-semibold active:scale-[0.97] transition-transform"
           style={{ background: "linear-gradient(135deg, var(--ws-accent), var(--ws-accent-2))" }}
         >
           =
         </button>
       </div>
+
 
       {showHistory && (
         <div className="absolute inset-0 z-10 bg-black/70 p-4 flex flex-col">
