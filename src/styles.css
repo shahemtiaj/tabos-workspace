@@ -108,7 +108,7 @@
       radial-gradient(1200px 800px at 8% -10%, color-mix(in oklab, var(--ws-accent) 55%, transparent), transparent 60%),
       radial-gradient(1000px 700px at 100% 10%, color-mix(in oklab, var(--ws-accent-2) 50%, transparent), transparent 55%),
       radial-gradient(900px 700px at 50% 120%, color-mix(in oklab, var(--ws-accent) 40%, transparent), transparent 60%),
-      linear-gradient(180deg, #06060f 0%, #05050d 100%);
+      linear-gradient(160deg, var(--ws-wall-from, #06060f) 0%, var(--ws-wall-to, #05050d) 100%);
     background-attachment: fixed;
     transition: background-image 500ms ease;
   }
@@ -178,4 +178,17 @@
 
 @utility animate-breath {
   animation: float-breath 6s ease-in-out infinite;
+}
+
+/* Weather icons: gentle motion, off for people who ask for less motion. */
+@keyframes wx-spin { to { transform: rotate(360deg); } }
+@keyframes wx-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes wx-rain { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
+@keyframes wx-flash { 0%, 88%, 100% { opacity: 1; } 92% { opacity: 0.35; } 96% { opacity: 1; } 98% { opacity: 0.5; } }
+.wx-spin { animation: wx-spin 24s linear infinite; }
+.wx-float { animation: wx-float 4s ease-in-out infinite; }
+.wx-rain { animation: wx-rain 1.6s ease-in-out infinite; }
+.wx-flash { animation: wx-flash 5s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .wx-spin, .wx-float, .wx-rain, .wx-flash { animation: none; }
 }

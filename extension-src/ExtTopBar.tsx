@@ -1,4 +1,4 @@
-import { Pencil, Settings, User } from "lucide-react";
+import { Pencil, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useClock, greetingFor, formatTime, formatDate } from "@/hooks/useClock";
@@ -31,7 +31,7 @@ export function ExtTopBar() {
           {hydrated && now ? formatDate(now) : "\u00A0"}
         </div>
         <h1 className="mt-1 text-3xl md:text-4xl font-semibold tracking-tight text-gradient truncate">
-          {hydrated && now ? `${greetingFor(now)}, ${userName}` : `Hello, ${userName}`}
+          {hydrated && now ? `${greetingFor(now)}${userName.trim() ? `, ${userName.trim()}` : ""}` : "Hello"}
         </h1>
       </div>
       <div className="flex items-center gap-3 flex-wrap lg:flex-nowrap shrink-0">
@@ -56,13 +56,6 @@ export function ExtTopBar() {
           >
             <Settings className="h-4 w-4" />
           </button>
-          <div
-            className="glass grid h-10 w-10 place-items-center"
-            style={{ borderRadius: "var(--radius-pill)" }}
-            aria-label="Profile"
-          >
-            <User className="h-4 w-4" />
-          </div>
         </div>
       </div>
       <div className="lg:hidden text-2xl font-mono tabular-nums text-white/80">

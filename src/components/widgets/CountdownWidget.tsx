@@ -2,6 +2,7 @@ import { CalendarClock, Plus, X } from "lucide-react";
 import { useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useHydrated } from "@/hooks/useHydrated";
 
@@ -28,6 +29,7 @@ export const useCountdownStore = create<S>()(
     { name: "tabos-countdown" },
   ),
 );
+syncAcrossTabs(useCountdownStore);
 
 function daysUntil(date: string) {
   const [y, m, d] = date.split("-").map(Number);

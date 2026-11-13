@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { persist, type PersistStorage } from "zustand/middleware";
 
 export type WidgetId =
@@ -206,3 +207,5 @@ export const useLayoutStore = create<State>()(
 
   ),
 );
+
+syncAcrossTabs(useLayoutStore);

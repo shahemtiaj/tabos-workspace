@@ -1,6 +1,7 @@
 import { Droplets, Minus, Plus } from "lucide-react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useHydrated } from "@/hooks/useHydrated";
 import { dayKey } from "@/stores/consistency";
@@ -30,6 +31,7 @@ export const useWaterStore = create<S>()(
     { name: "tabos-water" },
   ),
 );
+syncAcrossTabs(useWaterStore);
 
 export function WaterWidget() {
   const hydrated = useHydrated();

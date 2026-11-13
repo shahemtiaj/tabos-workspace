@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "build:extension": "bash scripts/build-extension.sh"
+    "build:extension": "node scripts/build-extension.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

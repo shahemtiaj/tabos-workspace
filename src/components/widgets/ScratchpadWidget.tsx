@@ -1,12 +1,14 @@
 import { Eraser, StickyNote } from "lucide-react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 
 type S = { text: string; set: (t: string) => void };
 const useScratch = create<S>()(
   persist((set) => ({ text: "", set: (text) => set({ text }) }), { name: "tabos-scratchpad" }),
 );
+syncAcrossTabs(useScratch);
 
 export function ScratchpadWidget() {
   const { text, set } = useScratch();

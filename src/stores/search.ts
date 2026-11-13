@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { persist } from "zustand/middleware";
 
 export type RecentSearch = { q: string; at: number };
@@ -27,3 +28,5 @@ export const useSearchStore = create<State>()(
     { name: "tabos-search-history" },
   ),
 );
+
+syncAcrossTabs(useSearchStore);

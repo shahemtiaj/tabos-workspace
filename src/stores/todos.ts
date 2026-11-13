@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { persist } from "zustand/middleware";
 
 export type Priority = "low" | "med" | "high";
@@ -21,11 +22,7 @@ type State = {
 export const useTodosStore = create<State>()(
   persist(
     (set) => ({
-      todos: [
-        { id: "1", title: "Design TabOS dashboard", done: false, priority: "high", createdAt: Date.now() },
-        { id: "2", title: "Review PRs", done: false, priority: "med", createdAt: Date.now() },
-        { id: "3", title: "Read 20 pages", done: true, priority: "low", createdAt: Date.now() },
-      ],
+      todos: [],
       add: (title, priority = "med") =>
         set((s) => ({
           todos: [{ id: crypto.randomUUID(), title, done: false, priority, createdAt: Date.now() }, ...s.todos],
@@ -37,3 +34,5 @@ export const useTodosStore = create<State>()(
     { name: "tabos-todos" },
   ),
 );
+
+syncAcrossTabs(useTodosStore);

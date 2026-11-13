@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { persist } from "zustand/middleware";
 
 export type Rule = {
@@ -26,12 +27,7 @@ export const dayKey = (d = new Date()) => {
 export const useConsistencyStore = create<State>()(
   persist(
     (set) => ({
-      rules: [
-        { id: "gym", title: "Go to Gym", history: {} },
-        { id: "code", title: "Code 3 Hours", history: {} },
-        { id: "read", title: "Read Book", history: {} },
-        { id: "sleep", title: "Sleep before 11 PM", history: {} },
-      ],
+      rules: [],
       add: (title) => set((s) => ({ rules: [...s.rules, { id: crypto.randomUUID(), title, history: {} }] })),
       remove: (id) => set((s) => ({ rules: s.rules.filter((r) => r.id !== id) })),
       toggle: (id, dk) =>
@@ -44,6 +40,8 @@ export const useConsistencyStore = create<State>()(
     { name: "tabos-consistency" },
   ),
 );
+
+syncAcrossTabs(useConsistencyStore);
 
 export function computeStreak(history: Record<string, boolean>): number {
   let streak = 0;
