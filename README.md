@@ -2,7 +2,7 @@
 
 TabOS replaces Chrome's default New Tab with a premium, glassmorphic productivity workspace: bookmarks, tasks, notes, focus timer, weather, and a whole bento grid of widgets you can resize and rearrange.
 
-Built by [Shah Emtiaj](https://shahemtiaj.com) · v1.2.0
+Built by [Shah Emtiaj](https://shahemtiaj.com) · v1.3.0
 
 ---
 
@@ -20,7 +20,7 @@ Built by [Shah Emtiaj](https://shahemtiaj.com) · v1.2.0
 
 ## Privacy
 
-TabOS requests **no Chrome permissions** and collects no analytics. All data lives in local browser storage. The only outbound requests are optional: Open-Meteo (weather), GeoJS (IP location, only if you enable auto-detect) and Google favicons (bookmark icons). See [`extension/PRIVACY.md`](extension/PRIVACY.md).
+TabOS requests **no Chrome permissions** and collects no analytics. All data lives in local browser storage, and Settings → Backup downloads it as a file. The only outbound requests are optional: Open-Meteo (weather — off until you choose a city, at most every 30 minutes), GeoJS (approximate area, only if you choose it, at most once a day) and Google favicons (bookmark icons). See [`extension/PRIVACY.md`](extension/PRIVACY.md).
 
 ## Tech stack
 
@@ -62,10 +62,19 @@ npm run lint
 ## Building the Chrome extension
 
 ```sh
-./scripts/build-extension.sh
+npm run build:extension      # or: node scripts/build-extension.mjs
 ```
 
-This compiles `extension-src/` into a self-contained SPA, writes it into `extension/`, and produces `public/tabos-extension-v<version>.zip`. Version comes from `src/lib/version.ts` and `extension/manifest.json` — bump both on release.
+This compiles `extension-src/` into a self-contained SPA, writes it into `extension/`, and produces `public/tabos-extension-v<version>.zip`. It runs on any OS (no `zip` tool needed) and stops if `src/lib/version.ts` and `extension/manifest.json` disagree — bump both on release.
+
+### Test in Chrome
+
+```sh
+npm i -D playwright
+node tests/e2e.mjs            # optional: pass a Chrome / Chromium path
+```
+
+Loads the built extension and checks first-run setup, weather caching, bookmarks, the focus timer, backup and restore, upgrades from 1.2.x and that open tabs stay in step. Weather and icon requests are answered locally, so no network is needed.
 
 ### Install locally
 

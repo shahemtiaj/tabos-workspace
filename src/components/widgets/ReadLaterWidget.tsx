@@ -2,6 +2,7 @@ import { BookmarkPlus, ExternalLink, Check } from "lucide-react";
 import { useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useHydrated } from "@/hooks/useHydrated";
 
@@ -41,6 +42,7 @@ export const useReadLaterStore = create<S>()(
     { name: "tabos-readlater" },
   ),
 );
+syncAcrossTabs(useReadLaterStore);
 
 export function ReadLaterWidget() {
   const hydrated = useHydrated();

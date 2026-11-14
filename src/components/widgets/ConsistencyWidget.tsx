@@ -37,6 +37,11 @@ export function ConsistencyWidget() {
         </div>
       </div>
 
+      {rules.length === 0 && (
+        <p className="text-sm text-white/45 pb-2">
+          Add a daily habit below — "Read 20 minutes", "Walk 5,000 steps" — and tick it off each day to build a streak.
+        </p>
+      )}
       <div className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 items-center flex-1 min-h-0 overflow-auto">
         {rules.map((r) => {
           const streak = computeStreak(r.history);

@@ -70,14 +70,14 @@
 </head>
 <body>
     <h1>TabOS — Privacy Policy</h1>
-    <p class="updated">Last updated: August 1, 2026</p>
+    <p class="updated">Last updated: November 14, 2026</p>
 
     <div class="highlight">
         <p><strong>TabOS is a Chrome new tab replacement. We do not collect, transmit, sell, or share any personal data.</strong> There is no analytics, no tracking, no account, and no server owned by us.</p>
     </div>
 
     <h2>What data TabOS stores</h2>
-    <p>Everything you create — workspaces, bookmarks, todos, notes, habits, timers, recent searches, and settings — is stored <strong>locally in your browser</strong> (extension local storage). It never leaves your device and is removed when you uninstall the extension.</p>
+    <p>Everything you create — workspaces, bookmarks, todos, notes, habits, timers, recent searches, and settings — is stored <strong>locally in your browser</strong> (extension local storage). It never leaves your device and is removed when you uninstall the extension. You can download a backup at any time in Settings → Backup.</p>
 
     <h2>Network requests</h2>
     <p>TabOS requests no Chrome permissions. It only makes these outbound requests, and only when the related widget is enabled:</p>
@@ -88,9 +88,9 @@
             <th>Data sent</th>
         </tr>
         <tr>
-            <td>Weather forecast</td>
+            <td>Weather forecast (only if you turn weather on; at most every 30 minutes)</td>
             <td>api.open-meteo.com</td>
-            <td>Approximate latitude/longitude</td>
+            <td>The latitude/longitude of the city you chose</td>
         </tr>
         <tr>
             <td>City search</td>
@@ -98,7 +98,7 @@
             <td>The city name you type</td>
         </tr>
         <tr>
-            <td>Approximate location (optional)</td>
+            <td>Approximate area (only if you choose "Use my approximate area"; at most once a day)</td>
             <td>get.geojs.io</td>
             <td>Your IP address (by the nature of the request)</td>
         </tr>
@@ -113,7 +113,7 @@
             <td>Only the query you submit</td>
         </tr>
     </table>
-    <p>You can disable the Weather and Read Later widgets in Settings to stop all optional network activity. Nothing is sent in the background.</p>
+    <p>Weather is off until you choose a city or your approximate area. Turn it off again, and hide the Bookmarks and Read Later widgets, to stop all optional network activity. Nothing is sent in the background.</p>
 
     <h2>Permissions</h2>
     <p>TabOS declares <strong>no permissions</strong> in its manifest. It cannot read your browsing history, tabs, cookies, or page content.</p>

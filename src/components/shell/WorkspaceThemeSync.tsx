@@ -12,6 +12,8 @@ export function WorkspaceThemeSync() {
     const root = document.documentElement;
     root.style.setProperty("--ws-accent", ws.accent);
     root.style.setProperty("--ws-accent-2", ws.accent2);
+    root.style.setProperty("--ws-wall-from", ws.wallpaperFrom ?? "#06060f");
+    root.style.setProperty("--ws-wall-to", ws.wallpaperTo ?? "#05050d");
     root.style.setProperty("--glass-blur", `${glassBlur}px`);
     root.style.setProperty(
       "--glass-bg",

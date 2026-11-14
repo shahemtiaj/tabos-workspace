@@ -50,6 +50,9 @@ export function TodosWidget() {
       </div>
 
       <div className="flex-1 overflow-auto -mx-1 px-1 space-y-1.5 min-h-0">
+        {todos.length === 0 && (
+          <p className="text-sm text-white/45 px-1 pt-1">No tasks yet. Add one below — it stays here until it's done.</p>
+        )}
         <AnimatePresence initial={false}>
           {todos.map((t) => (
             <motion.div

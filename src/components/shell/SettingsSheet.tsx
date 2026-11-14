@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
-import { X, Trash2, Plus, Copy, Locate, RotateCcw, Pencil } from "lucide-react";
+import { X, Trash2, Plus, Copy, RotateCcw, Pencil, Download, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { exportBackup, importBackup, eraseAll } from "@/lib/backup";
 import { useEffect, useState } from "react";
 import { TABOS_VERSION } from "@/lib/version";
-import { useSettingsStore, type SearchEngine, type FontFamily, type LocationMode } from "@/stores/settings";
+import { useSettingsStore, type SearchEngine, type FontFamily } from "@/stores/settings";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { useLayoutStore, OPTIONAL_WIDGETS, type WidgetId } from "@/stores/layout";
-import { isExtension } from "@/lib/env";
+import { LocationPicker } from "./LocationPicker";
 
 type Props = { open: boolean; onClose: () => void };
 
@@ -63,7 +65,30 @@ export function SettingsSheet({ open, onClose }: Props) {
     deleteWorkspace,
     duplicateWorkspace,
     renameWorkspace,
+    restoreWorkspace,
   } = useWorkspaceStore();
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [backupNote, setBackupNote] = useState<string | null>(null);
+
+  const removeWorkspace = (id: string) => {
+    if (confirmId !== id) {
+      // first click arms the button; it disarms itself after a few seconds
+      setConfirmId(id);
+      setTimeout(() => setConfirmId((c) => (c === id ? null : c)), 3000);
+      return;
+    }
+    setConfirmId(null);
+    const index = workspaces.findIndex((w) => w.id === id);
+    const ws = workspaces[index];
+    if (!ws) return;
+    const wasActive = activeId === id;
+    deleteWorkspace(id);
+    toast(`Deleted "${ws.name}"`, {
+      description: `${ws.bookmarks.length} bookmark${ws.bookmarks.length === 1 ? "" : "s"} removed`,
+      action: { label: "Undo", onClick: () => restoreWorkspace(ws, index, wasActive) },
+      duration: 8000,
+    });
+  };
   const layout = useLayoutStore();
   const [newName, setNewName] = useState("");
 
@@ -74,35 +99,6 @@ export function SettingsSheet({ open, onClose }: Props) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-
-  const detectLocation = async () => {
-    // In the extension (chrome://newtab), navigator.geolocation triggers a
-    // permission warning and is unreliable — use the same IP fallback the
-    // WeatherWidget uses. On the web app, keep the precise GPS prompt.
-    if (isExtension) {
-      try {
-        const res = await fetch("https://get.geojs.io/v1/ip/geo.json");
-        const data = await res.json();
-        const lat = parseFloat(data.latitude);
-        const lon = parseFloat(data.longitude);
-        if (Number.isFinite(lat)) s.setManualLat(Number(lat.toFixed(4)));
-        if (Number.isFinite(lon)) s.setManualLon(Number(lon.toFixed(4)));
-        if (data.city && !s.manualCity) s.setManualCity(data.city);
-      } catch {
-        /* ignore */
-      }
-      return;
-    }
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        s.setManualLat(Number(pos.coords.latitude.toFixed(4)));
-        s.setManualLon(Number(pos.coords.longitude.toFixed(4)));
-      },
-      undefined,
-      { timeout: 6000 },
-    );
-  };
 
   return (
     <AnimatePresence>
@@ -198,61 +194,9 @@ export function SettingsSheet({ open, onClose }: Props) {
               </Section>
 
               <Section title="Weather & Location">
-                <Row label="Location source">
-                  <select
-                    value={s.locationMode}
-                    onChange={(e) => s.setLocationMode(e.target.value as LocationMode)}
-                    className="glass-subtle rounded-full px-4 py-2 text-sm outline-none"
-                  >
-                    <option value="auto" className="bg-neutral-900">Auto (IP / GPS)</option>
-                    <option value="manual" className="bg-neutral-900">Manual</option>
-                  </select>
-                </Row>
-                {s.locationMode === "manual" && (
-                  <>
-                    <Row label="City label">
-                      <input
-                        value={s.manualCity}
-                        onChange={(e) => s.setManualCity(e.target.value)}
-                        placeholder="e.g. Dhaka"
-                        className="glass-subtle rounded-full px-4 py-2 text-sm outline-none w-56"
-                      />
-                    </Row>
-                    <Row label="Latitude">
-                      <input
-                        type="number"
-                        step="0.0001"
-                        value={s.manualLat ?? ""}
-                        onChange={(e) =>
-                          s.setManualLat(e.target.value === "" ? null : Number(e.target.value))
-                        }
-                        placeholder="23.8103"
-                        className="glass-subtle rounded-full px-4 py-2 text-sm outline-none w-40"
-                      />
-                    </Row>
-                    <Row label="Longitude">
-                      <input
-                        type="number"
-                        step="0.0001"
-                        value={s.manualLon ?? ""}
-                        onChange={(e) =>
-                          s.setManualLon(e.target.value === "" ? null : Number(e.target.value))
-                        }
-                        placeholder="90.4125"
-                        className="glass-subtle rounded-full px-4 py-2 text-sm outline-none w-40"
-                      />
-                    </Row>
-                    <Row label="Detect from GPS">
-                      <button
-                        type="button"
-                        onClick={detectLocation}
-                        className="glass-subtle rounded-full px-3 py-2 text-xs flex items-center gap-1 hover:bg-white/10"
-                      >
-                        <Locate className="h-3 w-3" /> Detect
-                      </button>
-                    </Row>
-                  </>
-                )}
+                <div className="py-3 border-b border-white/5">
+                  <LocationPicker />
+                </div>
                 <Row label="Temperature unit">
                   <div className="flex glass-subtle rounded-full p-0.5">
                     {(["c", "f"] as const).map((u) => (
@@ -435,12 +379,13 @@ export function SettingsSheet({ open, onClose }: Props) {
                         <Copy className="h-3.5 w-3.5" />
                       </button>
                       <button
-                        onClick={() => deleteWorkspace(w.id)}
+                        onClick={() => removeWorkspace(w.id)}
                         disabled={workspaces.length <= 1}
-                        className="h-7 w-7 grid place-items-center rounded-full hover:bg-red-500/20 text-white/60 disabled:opacity-30"
-                        aria-label="Delete"
+                        className={`h-7 grid place-items-center rounded-full disabled:opacity-30 transition-all ${confirmId === w.id ? "px-2.5 bg-red-500/70 text-white text-[11px]" : "w-7 hover:bg-red-500/20 text-white/60"}`}
+                        aria-label={confirmId === w.id ? `Confirm delete ${w.name}` : `Delete ${w.name}`}
+                        title={workspaces.length <= 1 ? "You need at least one workspace" : "Delete"}
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        {confirmId === w.id ? "Delete?" : <Trash2 className="h-3.5 w-3.5" />}
                       </button>
                     </div>
                   ))}
@@ -472,16 +417,64 @@ export function SettingsSheet({ open, onClose }: Props) {
                 </form>
               </Section>
 
+              <Section title="Backup">
+                <p className="text-xs text-white/50 py-2">
+                  Your TabOS data is saved only in this browser. Download a backup to keep it safe or to move it
+                  to another computer.
+                </p>
+                <div className="flex flex-wrap gap-2 pb-2">
+                  <button
+                    onClick={() => {
+                      exportBackup();
+                      setBackupNote("Backup downloaded.");
+                    }}
+                    className="glass-subtle rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 hover:bg-white/10"
+                  >
+                    <Download className="h-3 w-3" /> Download backup
+                  </button>
+                  <label className="glass-subtle rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 hover:bg-white/10 cursor-pointer">
+                    <Upload className="h-3 w-3" /> Restore from file
+                    <input
+                      type="file"
+                      accept="application/json,.json"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = "";
+                        if (!file) return;
+                        if (!window.confirm("Replace everything in TabOS with this backup?")) return;
+                        try {
+                          await importBackup(file);
+                          window.location.reload();
+                        } catch (err) {
+                          setBackupNote((err as Error).message);
+                        }
+                      }}
+                    />
+                  </label>
+                  <button
+                    onClick={() => {
+                      if (!window.confirm("Erase all TabOS data on this computer? This can't be undone — download a backup first if you might want it.")) return;
+                      eraseAll();
+                      window.location.reload();
+                    }}
+                    className="rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 text-red-200/80 hover:bg-red-500/20"
+                  >
+                    <Trash2 className="h-3 w-3" /> Erase all data
+                  </button>
+                </div>
+                {backupNote && <p className="text-[11px] text-white/55 pb-2">{backupNote}</p>}
+              </Section>
+
               <div
                 className="glass p-4 text-[11px] leading-relaxed text-white/50"
                 style={{ borderRadius: "var(--radius-card)" }}
               >
                 <p className="text-white/70 font-medium mb-1">Privacy</p>
-                TabOS requests no browser permissions and collects no personal data.
-                Everything you create stays in local browser storage on this device.
-                Optional network calls happen only for weather (open-meteo.com),
-                approximate location (get.geojs.io), bookmark icons, and the search
-                engine you choose.
+                TabOS requests no browser permissions and collects no personal data. Everything you create
+                stays in this browser. It only goes online for: the weather, if you turn it on (Open-Meteo,
+                at most every 30 minutes); your approximate area, only if you choose "Use my approximate
+                area" (GeoJS, at most once a day); bookmark icons (Google); and the searches you make.
               </div>
 
               <div className="pt-1 pb-2 text-center">

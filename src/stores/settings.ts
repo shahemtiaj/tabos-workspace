@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 
 export type SearchEngine = "google" | "duckduckgo" | "brave" | "bing";
-export type LocationMode = "auto" | "manual";
+// off: no weather requests at all. auto: city-level location from the IP
+// address. manual: a city the user picked.
+export type LocationMode = "off" | "auto" | "manual";
 export type FontFamily = "poppins" | "space-grotesk" | "inter" | "system";
 
 export const FONT_STACKS: Record<FontFamily, string> = {
@@ -14,6 +17,7 @@ export const FONT_STACKS: Record<FontFamily, string> = {
 };
 
 type State = {
+  onboarded: boolean;
   userName: string;
   searchEngine: SearchEngine;
   clockSeconds: boolean;
@@ -31,6 +35,10 @@ type State = {
   manualLat: number | null;
   manualLon: number | null;
   tempUnit: "c" | "f";
+  focusSound: boolean;
+  setOnboarded: (v: boolean) => void;
+  setPlace: (p: { name: string; lat: number; lon: number }) => void;
+  setFocusSound: (v: boolean) => void;
   setUserName: (v: string) => void;
   setSearchEngine: (v: SearchEngine) => void;
   setClockSeconds: (v: boolean) => void;
@@ -52,7 +60,8 @@ type State = {
 export const useSettingsStore = create<State>()(
   persist(
     (set) => ({
-      userName: "User",
+      onboarded: false,
+      userName: "",
       searchEngine: "google",
       clockSeconds: false,
       clock24h: false,
@@ -63,11 +72,15 @@ export const useSettingsStore = create<State>()(
       uiScale: 100,
       bgDim: 0,
       recentSearchLimit: 5,
-      locationMode: "auto",
+      locationMode: "off",
       manualCity: "",
       manualLat: null,
       manualLon: null,
       tempUnit: "c",
+      focusSound: true,
+      setOnboarded: (onboarded) => set({ onboarded }),
+      setPlace: (p) => set({ locationMode: "manual", manualCity: p.name, manualLat: p.lat, manualLon: p.lon }),
+      setFocusSound: (focusSound) => set({ focusSound }),
       setUserName: (userName) => set({ userName }),
       setSearchEngine: (searchEngine) => set({ searchEngine }),
       setClockSeconds: (clockSeconds) => set({ clockSeconds }),
@@ -85,6 +98,18 @@ export const useSettingsStore = create<State>()(
       setManualLon: (manualLon) => set({ manualLon }),
       setTempUnit: (tempUnit) => set({ tempUnit }),
     }),
-    { name: "tabos-settings" },
+    {
+      name: "tabos-settings",
+      version: 1,
+      // Settings saved by v1.2 and earlier: that person has used TabOS already,
+      // so skip the first-run setup and keep the location choice they had.
+      migrate: (persisted, version) => {
+        const p = (persisted ?? {}) as Partial<State>;
+        if (version < 1) return { ...p, onboarded: true, userName: p.userName === "User" ? "" : p.userName } as State;
+        return p as State;
+      },
+    },
   ),
 );
+
+syncAcrossTabs(useSettingsStore);

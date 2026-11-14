@@ -2,6 +2,7 @@ import { Globe2, X, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { useClock } from "@/hooks/useClock";
 import { useSettingsStore } from "@/stores/settings";
@@ -24,6 +25,7 @@ const useWorldClocks = create<S>()(
     { name: "tabos-world-clocks" },
   ),
 );
+syncAcrossTabs(useWorldClocks);
 
 const TZ_OPTIONS: { tz: string; label: string }[] = [
   { tz: "Pacific/Honolulu", label: "Honolulu" },

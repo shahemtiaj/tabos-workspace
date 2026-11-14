@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { syncAcrossTabs } from "@/lib/crossTab";
 import { persist } from "zustand/middleware";
 
 export type CalcEntry = { expr: string; result: string; at: number };
@@ -20,3 +21,5 @@ export const useCalculatorStore = create<State>()(
     { name: "tabos-calculator" },
   ),
 );
+
+syncAcrossTabs(useCalculatorStore);
